@@ -1,6 +1,8 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2008
 
+Project("{977ED777-8ABB-4C84-6BBC-4842D0CFA494}") = "TempUnityFramework", "Assembly-CSharp.csproj", "{B7D5BFE6-8CB3-E71B-A9F3-E9D837A753D8}"
+EndProject
 Project("{977ED777-8ABB-4C84-6BBC-4842D0CFA494}") = "TempUnityFramework", "Assembly-CSharp-Editor.csproj", "{6A4C053E-8E0D-D7E7-9BF2-5D6E2F14E110}"
 EndProject
 Global
@@ -9,6 +11,10 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B7D5BFE6-8CB3-E71B-A9F3-E9D837A753D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7D5BFE6-8CB3-E71B-A9F3-E9D837A753D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7D5BFE6-8CB3-E71B-A9F3-E9D837A753D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7D5BFE6-8CB3-E71B-A9F3-E9D837A753D8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{6A4C053E-8E0D-D7E7-9BF2-5D6E2F14E110}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6A4C053E-8E0D-D7E7-9BF2-5D6E2F14E110}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A4C053E-8E0D-D7E7-9BF2-5D6E2F14E110}.Release|Any CPU.ActiveCfg = Release|Any CPU
