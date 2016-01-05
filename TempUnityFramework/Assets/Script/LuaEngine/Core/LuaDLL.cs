@@ -10,8 +10,8 @@
 	#pragma warning disable 414
     public class MonoPInvokeCallbackAttribute : System.Attribute
     {
-        private Type type;
-        public MonoPInvokeCallbackAttribute(Type t) { type = t; }
+        private Type Type;
+        public MonoPInvokeCallbackAttribute(Type t) { Type = t; }
     }
 	#pragma warning restore 414
 	
@@ -128,7 +128,7 @@
 		[DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int lua_gc(IntPtr luaState, LuaGCOptions what, int data);
 		[DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
-		public static extern string lua_typename(IntPtr luaState, LuaTypes type);
+		public static extern string lua_typename(IntPtr luaState, LuaTypes Type);
 		public static string luaL_typename(IntPtr luaState, int stackPos)
 		{
 			return LuaDLL.lua_typename(luaState, LuaDLL.lua_type(luaState, stackPos));

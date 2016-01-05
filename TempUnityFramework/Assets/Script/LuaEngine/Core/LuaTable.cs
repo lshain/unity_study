@@ -129,7 +129,7 @@ namespace LuaInterface
         public LuaFunction RawGetFunc(string field)
         {            
             IntPtr L = _Interpreter.L;
-            LuaTypes type = LuaTypes.LUA_TNONE;
+            LuaTypes Type = LuaTypes.LUA_TNONE;
             LuaFunction func = null;
 
             int oldTop = LuaDLL.lua_gettop(L);
@@ -137,9 +137,9 @@ namespace LuaInterface
             LuaDLL.lua_pushstring(L, field);
             LuaDLL.lua_gettable(L, -2);
 
-            type = LuaDLL.lua_type(L, -1);
+            Type = LuaDLL.lua_type(L, -1);
 
-            if (type == LuaTypes.LUA_TFUNCTION)
+            if (Type == LuaTypes.LUA_TFUNCTION)
             {
                 func = new LuaFunction(LuaDLL.luaL_ref(L, LuaIndexes.LUA_REGISTRYINDEX), L);                
             }

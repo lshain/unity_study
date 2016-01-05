@@ -6,20 +6,20 @@ using System.Reflection;
 using LuaInterface;
 
 
-public class Client : MonoBehaviour 
-{    
+public class Client : MonoBehaviour
+{
     LuaScriptMgr luaMgr = null;
 
     void Awake()
-    {        
+    {
         luaMgr = new LuaScriptMgr();
-        luaMgr.Start();            
+        luaMgr.Start();
     }
 
-	void Start () 
+    void Start()
     {
-        luaMgr.DoFile("Test.Lua");    
-	}
+        luaMgr.DoFile("Test.Lua");
+    }
 
     void Update()
     {
@@ -44,38 +44,38 @@ public class Client : MonoBehaviour
             luaMgr.FixedUpdate();
         }
     }
-		
-	void OnGUI()
+
+    void OnGUI()
     {
-#pragma warning disable 219        
+#pragma warning disable 219
         if (GUI.Button(new Rect(10, 10, 120, 50), "Test"))
-        {            
+        {
             float time = Time.realtimeSinceStartup;
             Vector3 v = Vector3.one;
 
             for (int i = 0; i < 200000; i++)
             {
-                v = transform.position;                
+                v = transform.position;
                 transform.position = Vector3.one;
             }
 
             Debug.Log("c# cost time: " + (Time.realtimeSinceStartup - time));
 
             transform.position = Vector3.zero;
-            luaMgr.CallLuaFunction("Test");            
+            luaMgr.CallLuaFunction("Test");
         }
 
-        if (GUI.Button(new Rect(10,70,120,50), "Test2"))
+        if (GUI.Button(new Rect(10, 70, 120, 50), "Test2"))
         {
-            float time = Time.realtimeSinceStartup;            
+            float time = Time.realtimeSinceStartup;
 
             for (int i = 0; i < 200000; i++)
             {
                 transform.Rotate(Vector3.up, 1);
             }
 
-            Debug.Log("c# cost time: " + (Time.realtimeSinceStartup - time));            
-            luaMgr.CallLuaFunction("Test2", transform);    
+            Debug.Log("c# cost time: " + (Time.realtimeSinceStartup - time));
+            luaMgr.CallLuaFunction("Test2", transform);
         }
 
         if (GUI.Button(new Rect(10, 130, 120, 50), "Test3"))
@@ -95,7 +95,7 @@ public class Client : MonoBehaviour
 
         if (GUI.Button(new Rect(10, 190, 120, 50), "Test4"))
         {
-            float time = Time.realtimeSinceStartup;            
+            float time = Time.realtimeSinceStartup;
 
             for (int i = 0; i < 200000; i++)
             {
@@ -108,7 +108,7 @@ public class Client : MonoBehaviour
 
         if (GUI.Button(new Rect(10, 250, 120, 50), "Test5"))
         {
-            float time = Time.realtimeSinceStartup;            
+            float time = Time.realtimeSinceStartup;
 
             for (int i = 0; i < 20000; i++)
             {

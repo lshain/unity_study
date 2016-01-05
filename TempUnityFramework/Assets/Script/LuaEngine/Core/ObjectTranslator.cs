@@ -169,7 +169,7 @@
             LuaDLL.lua_settop(luaState, -2);
         }
         /*
-         * Creates the metatable for type references
+         * Creates the metatable for Type references
          */
         private void createClassMetatable(IntPtr luaState)
         {
@@ -313,11 +313,11 @@
             return 0;
         }
 
-        internal Type FindType(string className)
+        internal Type FindType(string Name)
         {
             foreach (Assembly assembly in assemblies)
             {
-                Type klass = assembly.GetType(className);
+                Type klass = assembly.GetType(Name);
                 if (klass != null)
                 {
                     return klass;
@@ -328,14 +328,14 @@
 
         /*
          * Implementation of import_type. Returns nil if the
-         * type is not found.
+         * Type is not found.
          */
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         public static int importType(IntPtr luaState)
         {
             ObjectTranslator translator = ObjectTranslator.FromState(luaState);
-            string className = LuaDLL.lua_tostring(luaState, 1);
-            Type klass = translator.FindType(className);
+            string Name = LuaDLL.lua_tostring(luaState, 1);
+            Type klass = translator.FindType(Name);
             if (klass != null)
                 translator.pushType(luaState, klass);
             else
@@ -345,7 +345,7 @@
         /*
          * Implementation of make_object. Registers a table (first
          * argument in the stack) as an object subclassing the
-         * type passed as second argument in the stack.
+         * Type passed as second argument in the stack.
          */
         [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
         public static int registerTable(IntPtr luaState)
@@ -445,7 +445,7 @@
                 target = translator.getRawNetObject(luaState, 1);
                 if (target == null)
                 {
-                    translator.throwError(luaState, "get_method_bysig: first arg is not type or object reference");
+                    translator.throwError(luaState, "get_method_bysig: first arg is not Type or object reference");
                     LuaDLL.lua_pushnil(luaState);
                     return 1;
                 }
@@ -485,7 +485,7 @@
             }
             if (klass == null)
             {
-                translator.throwError(luaState, "get_constructor_bysig: first arg is invalid type reference");
+                translator.throwError(luaState, "get_constructor_bysig: first arg is invalid Type reference");
             }
             Type[] signature = new Type[LuaDLL.lua_gettop(luaState) - 1];
             for (int i = 0; i < signature.Length; i++)
@@ -580,7 +580,7 @@
         }
 
         /*
-         * Pushes a type reference into the stack
+         * Pushes a Type reference into the stack
          */
         internal void pushType(IntPtr luaState, Type t)
         {
@@ -678,7 +678,7 @@
 
             if (metatable == "luaNet_metatable")
             {
-                // Gets or creates the metatable for the object's type
+                // Gets or creates the metatable for the object's Type
                 //string meta = t.AssemblyQualifiedName
                 //LuaDLL.luaL_getmetatable(luaState, meta);
                 Type t = o.GetType();
@@ -687,7 +687,7 @@
                 if (LuaDLL.lua_isnil(luaState, -1))
                 {
                     string meta = t.AssemblyQualifiedName;
-                    Debugger.LogWarning("Create not wrap ulua type:" + meta);
+                    LogManager.W("Create not wrap ulua Type:" + meta);
                     LuaDLL.lua_settop(luaState, -2);
                     LuaDLL.luaL_newmetatable(luaState, meta);
                     LuaDLL.lua_pushstring(luaState, "cache");
@@ -734,7 +734,7 @@
             if (LuaDLL.lua_isnil(luaState, -1))
             {
                 string meta = t.AssemblyQualifiedName;
-                Debugger.LogWarning("Create not wrap ulua type:" + meta);
+                LogManager.W("Create not wrap ulua Type:" + meta);
                 LuaDLL.lua_settop(luaState, -2);
                 LuaDLL.luaL_newmetatable(luaState, meta);
                 LuaDLL.lua_pushstring(luaState, "cache");
@@ -762,7 +762,7 @@
         }
 
         /*
-         * Gets an object from the Lua stack with the desired type, if it matches, otherwise
+         * Gets an object from the Lua stack with the desired Type, if it matches, otherwise
          * returns null.
          */
         internal object getAsType(IntPtr luaState, int stackPos, Type paramType)
@@ -845,7 +845,7 @@
         }
 
         /*
-         * Gets an object from the Lua stack according to its Lua type.
+         * Gets an object from the Lua stack according to its Lua Type.
          */
         public object getObject(IntPtr luaState, int index)
         {
@@ -991,7 +991,7 @@
         }
 
         /*
-         * Pushes the object into the Lua stack according to its type.
+         * Pushes the object into the Lua stack according to its Type.
          */
         internal void push(IntPtr luaState, object o)
         {            

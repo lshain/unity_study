@@ -27,7 +27,7 @@
 
                 if (mi != null)
                 {                    
-                    //SJD this is guaranteed to be correct irrespective of actual name used for type..
+                    //SJD this is guaranteed to be correct irrespective of actual name used for Type..
                     IsReturnVoid = mi.ReturnType == typeof(void);
                 }
             }
@@ -59,7 +59,7 @@
     }
 
     /*
-     * Argument extraction with type-conversion function
+     * Argument extraction with Type-conversion function
      */
     delegate object ExtractValue(IntPtr luaState, int stackPos);
 
@@ -176,18 +176,18 @@
                         {
                             for (int i = 0; i < _LastCalledMethod.argTypes.Length; i++)
                             {
-                                MethodArgs type = _LastCalledMethod.argTypes[i];
-                                object luaParamValue = type.extractValue(luaState, i + 1 + numStackToSkip);
+                                MethodArgs Type = _LastCalledMethod.argTypes[i];
+                                object luaParamValue = Type.extractValue(luaState, i + 1 + numStackToSkip);
                                 if (_LastCalledMethod.argTypes[i].isParamsArray)
                                 {
-                                    args[type.index] = _Translator.tableToArray(luaParamValue,type.paramsArrayType);
+                                    args[Type.index] = _Translator.tableToArray(luaParamValue,Type.paramsArrayType);
                                 }
                                 else
                                 {
-                                    args[type.index] = luaParamValue;
+                                    args[Type.index] = luaParamValue;
                                 }
 
-                                if (args[type.index] == null &&
+                                if (args[Type.index] == null &&
                                     !LuaDLL.lua_isnil(luaState, i + 1 + numStackToSkip))
                                 {
                                     throw new LuaException("argument number " + (i + 1) + " is invalid");
@@ -275,7 +275,7 @@
 
                     if (methodToCall.IsGenericMethodDefinition)
                     {
-                        //need to make a concrete type of the generic method definition
+                        //need to make a concrete Type of the generic method definition
                         List<Type> typeArgs = new List<Type>();
 
                         foreach (object arg in _LastCalledMethod.args)

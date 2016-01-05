@@ -283,8 +283,8 @@ namespace LuaInterface
             byte[] text = LuaStatic.Load(fileName);
 
             if (text == null)
-            {                
-                Debugger.LogError("Loader lua file failed: {0}", fileName);      
+            {
+                LogManager.E("Loader lua file failed: {0}", fileName);      
                 LuaDLL.lua_pop(L, 1);
                 return null;
             }
@@ -357,11 +357,11 @@ namespace LuaInterface
                 {
                     //LuaDLL.lua_getglobal(L, path[0]);
                     LuaDLL.lua_rawglobal(L, path[0]);
-                    LuaTypes type = LuaDLL.lua_type(L, -1);
+                    LuaTypes Type = LuaDLL.lua_type(L, -1);
 
-                    if (type == LuaTypes.LUA_TNIL)
+                    if (Type == LuaTypes.LUA_TNIL)
                     {
-                        Debugger.LogError("Table {0} not exists", path[0]);
+                        LogManager.E("Table {0} not exists", path[0]);
                         LuaDLL.lua_settop(L, oldTop);
                         return;
                     }
@@ -374,7 +374,7 @@ namespace LuaInterface
                 LuaDLL.lua_settop(L, oldTop);
 
                 // Globals auto-complete
-                // comment by topameng, too many time cost, you shound register you type in other position                
+                // comment by topameng, too many time cost, you shound register you Type in other position                
                 /*if (value == null)
                 {
                     // Remove now obsolete entries
@@ -416,21 +416,21 @@ namespace LuaInterface
         /// Adds an entry to <see cref="globals"/> (recursivley handles 2 levels of members)
         /// </summary>
         /// <param name="path">The index accessor path ot the entry</param>
-        /// <param name="type">The type of the entry</param>
+        /// <param name="Type">The Type of the entry</param>
         /// <param name="recursionCounter">How deep have we gone with recursion?</param>
-        //private void registerGlobal(string path, Type type, int recursionCounter)
+        //private void registerGlobal(string path, Type Type, int recursionCounter)
         //{
-        //    // If the type is a global method, list it directly
-        //    if (type == typeof(LuaCSFunction))
+        //    // If the Type is a global method, list it directly
+        //    if (Type == typeof(LuaCSFunction))
         //    {
         //        // Format for easy method invocation
         //        globals.Add(path + "(");
         //    }
-        //    // If the type is a class or an interface and recursion hasn't been running too long, list the members
-        //    else if ((type.IsClass || type.IsInterface) && type != typeof(string) && recursionCounter < 2)
+        //    // If the Type is a class or an interface and recursion hasn't been running too long, list the members
+        //    else if ((Type.IsClass || Type.IsInterface) && Type != typeof(string) && recursionCounter < 2)
         //    {
         //        #region Methods
-        //        foreach (MethodInfo method in type.GetMethods(BindingFlags.Public | BindingFlags.Instance))
+        //        foreach (MethodInfo method in Type.GetMethods(BindingFlags.Public | BindingFlags.Instance))
         //        {
         //            if (
         //                // Check that the LuaHideAttribute and LuaGlobalAttribute were not applied
@@ -454,7 +454,7 @@ namespace LuaInterface
         //        #endregion
 
         //        #region Fields
-        //        foreach (FieldInfo field in type.GetFields(BindingFlags.Public | BindingFlags.Instance))
+        //        foreach (FieldInfo field in Type.GetFields(BindingFlags.Public | BindingFlags.Instance))
         //        {
         //            if (
         //                // Check that the LuaHideAttribute and LuaGlobalAttribute were not applied
@@ -468,7 +468,7 @@ namespace LuaInterface
         //        #endregion
 
         //        #region Properties
-        //        foreach (PropertyInfo property in type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
+        //        foreach (PropertyInfo property in Type.GetProperties(BindingFlags.Public | BindingFlags.Instance))
         //        {
         //            if (
         //                // Check that the LuaHideAttribute and LuaGlobalAttribute were not applied
@@ -550,7 +550,7 @@ namespace LuaInterface
         }
         /*
          * Gets a function global variable as a delegate of
-         * type delegateType
+         * Type delegateType
          */
         public Delegate GetFunction(Type delegateType, string fullPath)
         {
@@ -632,9 +632,9 @@ namespace LuaInterface
             //if (val == null)
             //{
             //    LuaDLL.lua_gettable(L, -2);               
-            //    LuaTypes type = LuaDLL.lua_type(L, -1);
+            //    LuaTypes Type = LuaDLL.lua_type(L, -1);
 
-            //    if (type == LuaTypes.LUA_TUSERDATA)
+            //    if (Type == LuaTypes.LUA_TUSERDATA)
             //    {
             //        int udata = LuaDLL.luanet_tonetobject(L, -1);
 

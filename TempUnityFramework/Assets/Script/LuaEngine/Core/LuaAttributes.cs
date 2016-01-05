@@ -1,25 +1,28 @@
 ﻿using System;
 
-public class NoToLuaAttribute : System.Attribute
+namespace LuaInterface
 {
-    public NoToLuaAttribute()
+    public class NoToLuaAttribute : System.Attribute
     {
+        public NoToLuaAttribute()
+        {
 
+        }
     }
-}
 
-public class OnlyGCAttribute : System.Attribute
-{
-    public OnlyGCAttribute()
+    public class OnlyGCAttribute : System.Attribute
     {
+        public OnlyGCAttribute()
+        {
 
+        }
     }
-}
 
-public class UseDefinedAttribute : System.Attribute
-{
-    public UseDefinedAttribute()
+    public class UseDefinedAttribute : System.Attribute
     {
+        public UseDefinedAttribute()
+        {
 
+        }
     }
 }

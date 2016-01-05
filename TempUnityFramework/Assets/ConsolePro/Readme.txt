@@ -38,11 +38,11 @@ Type @ before a search string in the search field or in custom filter strings to
 @[A-Za-z]
 
 # Custom filters:
-Custom filters allow you to add more log types to the toolbar next to Errors, Warnings, Logs and to give them a custom color.  You can filter them by type and string.
+Custom filters allow you to add more log types to the toolbar next to Errors, Warnings, Logs and to give them a custom color.  You can filter them by Type and string.
 Create a filter by:
 Press the Prefs button to bring up preferences.
 Press New Filter.
-Here you can name your filter, select the log type (error, warning, log), pick what to filter from (file name, class/method containing the debug.log call, object name, or log text), and a color to identify them with.
+Here you can name your filter, select the log Type (error, warning, log), pick what to filter from (file name, class/method containing the debug.log call, object name, or log text), and a color to identify them with.
 
 # Jumping to stack entries
 Simply click on any line in the stack panel to jump to that line in the source code.  Double clicking a log entry jumps to the top stack entry as normal.

@@ -108,7 +108,7 @@ namespace LuaInterface
                 else if (luatype == LuaTypes.LUA_TNUMBER)
                     return extractValues[typeof(double).TypeHandle.Value.ToInt64()];
                 //else // suppress CS0642
-                    ;//an unsupported type was encountered
+                    ;//an unsupported Type was encountered
             }
 
             if (paramType.IsValueType && luatype == LuaTypes.LUA_TTABLE)
@@ -227,7 +227,7 @@ namespace LuaInterface
 
         /*
          * The following functions return the value in the Lua stack
-         * index stackPos as the desired type if it can, or null
+         * index stackPos as the desired Type if it can, or null
          * otherwise.
          */
         private object getAsSbyte(IntPtr luaState,int stackPos)

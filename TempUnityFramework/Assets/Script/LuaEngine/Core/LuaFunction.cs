@@ -71,7 +71,7 @@ namespace LuaInterface
                 string err = LuaDLL.lua_tostring(L, -1);                                
                 LuaDLL.lua_settop(L, oldTop - 1);                                
                 if (err == null) err = "Unknown Lua Error";
-                Debugger.LogError(err);
+                LogManager.E(err);
                 LuaDLL.lua_settop(L, oldTop - 1);
                 return null;
             }
@@ -137,8 +137,8 @@ namespace LuaInterface
             {                
                 string err = LuaDLL.lua_tostring(L, -1);
                 LuaDLL.lua_settop(L, oldTop - 1);                
-                if (err == null) err = "Unknown Lua Error";                
-                Debugger.LogError(err);
+                if (err == null) err = "Unknown Lua Error";
+                LogManager.E(err);
                 return false;
             }
 

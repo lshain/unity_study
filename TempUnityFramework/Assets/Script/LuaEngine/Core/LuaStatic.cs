@@ -163,17 +163,17 @@ namespace LuaInterface
             local debug = debug
             local import_type = luanet.import_type
             local load_assembly = luanet.load_assembly
-            luanet.error, luanet.type = error, type
+            luanet.error, luanet.Type = error, Type
             -- Lookup a .NET identifier component.
             function metatable:__index(key) -- key is e.g. 'Form'
             -- Get the fully-qualified name, e.g. 'System.Windows.Forms.Form'
             local fqn = rawget(self,'.fqn')
             fqn = ((fqn and fqn .. '.') or '') .. key
 
-            -- Try to find either a luanet function or a CLR type
+            -- Try to find either a luanet function or a CLR Type
             local obj = rawget(luanet,key) or import_type(fqn)
 
-            -- If key is neither a luanet function or a CLR type, then it is simply
+            -- If key is neither a luanet function or a CLR Type, then it is simply
             -- an identifier component.
             if obj == nil then
                 -- It might be an assembly, so we load it too.
@@ -187,9 +187,9 @@ namespace LuaInterface
             return obj
             end
 
-            -- A non-type has been called; e.g. foo = System.Foo()
+            -- A non-Type has been called; e.g. foo = System.Foo()
             function metatable:__call(...)
-            error('No such type: ' .. rawget(self,'.fqn'), 2)
+            error('No such Type: ' .. rawget(self,'.fqn'), 2)
             end
 
             -- This is the root of the .NET namespace

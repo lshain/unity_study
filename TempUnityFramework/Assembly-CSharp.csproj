@@ -38,16 +38,16 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="UnityEngine">
-      <HintPath>D:/Unity5/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+      <HintPath>D:/Program Files/Unity5/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor">
-      <HintPath>D:/Unity5/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+      <HintPath>D:/Program Files/Unity5/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Script\Common\GlobalConst.cs" />
+     <Compile Include="Assets\Script\Common\LogManager.cs" />
      <Compile Include="Assets\Script\EngineInit.cs" />
-     <Compile Include="Assets\Script\Logger\Logger.cs" />
      <Compile Include="Assets\Script\LuaEngine\Base\Client.cs" />
      <Compile Include="Assets\Script\LuaEngine\Base\DelegateFactory.cs" />
      <Compile Include="Assets\Script\LuaEngine\Base\LockFreeQueue.cs" />
@@ -73,13 +73,15 @@
      <Compile Include="Assets\Script\LuaEngine\Core\MethodWrapper.cs" />
      <Compile Include="Assets\Script\LuaEngine\Core\ObjectTranslator.cs" />
      <Compile Include="Assets\Script\LuaEngine\Core\ProxyType.cs" />
-     <Compile Include="Assets\Script\LuaEngine\LuaWrapper\LuaWrapper.cs" />
      <None Include="Assets\ConsolePro\Readme.txt" />
  <Reference Include="UnityEngine.UI">
- <HintPath>D:/Unity5/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
+ <HintPath>D:/Program Files/Unity5/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Networking">
- <HintPath>D:/Unity5/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ <HintPath>D:/Program Files/Unity5/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+ <HintPath>D:/Program Files/Unity5/Unity/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
