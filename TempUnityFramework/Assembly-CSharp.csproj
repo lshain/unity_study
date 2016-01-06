@@ -38,10 +38,10 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="UnityEngine">
-      <HintPath>D:/Unity5/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+      <HintPath>D:/Program Files/Unity5/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor">
-      <HintPath>D:/Unity5/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+      <HintPath>D:/Program Files/Unity5/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -73,67 +73,15 @@
      <Compile Include="Assets\Script\LuaEngine\Core\MethodWrapper.cs" />
      <Compile Include="Assets\Script\LuaEngine\Core\ObjectTranslator.cs" />
      <Compile Include="Assets\Script\LuaEngine\Core\ProxyType.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\AnimationBlendModeWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\AnimationClipWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\AnimationStateWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\AnimationWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\ApplicationWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\AssetBundleWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\AsyncOperationWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\AudioClipWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\AudioSourceWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\BehaviourWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\BlendWeightsWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\BoxColliderWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\CameraClearFlagsWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\CameraWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\CharacterControllerWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\ColliderWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\ComponentWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\DelegateWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\EnumWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\GameObjectWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\IEnumeratorWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\InputWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\KeyCodeWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\LightTypeWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\LightWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\Lshain_LogManagerWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\MaterialWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\MeshColliderWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\MeshRendererWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\MonoBehaviourWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\ObjectWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\ParticleAnimatorWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\ParticleEmitterWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\ParticleRendererWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\ParticleSystemWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\PhysicsWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\PlayModeWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\QualitySettingsWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\QueueModeWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\RenderSettingsWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\RenderTextureWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\RendererWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\ScreenWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\SkinnedMeshRendererWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\SleepTimeoutWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\SpaceWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\SphereColliderWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\System_ObjectWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\TextureWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\TimeWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\TouchPhaseWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\TrackedReferenceWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\TransformWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\TypeWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\stringWrap.cs" />
      <None Include="Assets\ConsolePro\Readme.txt" />
  <Reference Include="UnityEngine.UI">
- <HintPath>D:/Unity5/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
+ <HintPath>D:/Program Files/Unity5/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Networking">
- <HintPath>D:/Unity5/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ <HintPath>D:/Program Files/Unity5/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
+ </Reference>
+ <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+ <HintPath>D:/Program Files/Unity5/Unity/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

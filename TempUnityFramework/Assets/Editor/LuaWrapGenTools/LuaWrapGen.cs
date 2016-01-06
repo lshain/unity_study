@@ -21,6 +21,13 @@ namespace Lshain
 		public static readonly string LUA_BINDER_FILE = Application.dataPath + "/Script/LuaEngine/Base/LuaBinder.cs";
 		public static readonly string LUA_DELEGATE_FACTORY_FILE = Application.dataPath + "/Script/LuaEngine/Base/DelegateFactory.cs";
 
+        private static readonly string INDENT_NONE = "";
+        private static readonly string INDENT_1 = "\t";
+        private static readonly string INDENT_2 = "\t\t";
+        private static readonly string INDENT_3 = "\t\t\t";
+        private static readonly string INDENT_4 = "\t\t\t\t";
+        private static readonly string INDENT_5 = "\t\t\t\t\t";
+
 		static string GetOS ()
 		{
 #if UNITY_STANDALONE
@@ -38,6 +45,22 @@ namespace Lshain
 				Directory.CreateDirectory (dir);
 			}
 		}
+
+        public static void DeleteDir (string dir)
+        {
+            if (Directory.Exists(dir))
+            {
+                foreach (string d in Directory.GetFileSystemEntries(dir))
+                {
+                    if (File.Exists(d))
+                        File.Delete(d);                   
+                    else
+                        DeleteDir(d);
+                }
+
+                Directory.Delete(dir, true);            
+            }
+        }
 
 		static LuaWrapGen ()
 		{
@@ -282,6 +305,7 @@ namespace Lshain
 				EditorApplication.isPlaying = true;
 			}
 
+            DeleteDir (LUA_WRAPFILE_DIR);
 			CreateDir (LUA_WRAPFILE_DIR);
 
 			BindType[] list = _BIND_CLASS_LIST_;
@@ -310,20 +334,28 @@ namespace Lshain
 			sb.AppendLine ();
 			sb.AppendLine ("public static class LuaBinder");
 			sb.AppendLine ("{");
-			sb.AppendLine ("\tpublic static void Bind(IntPtr L)");
-			sb.AppendLine ("\t{");
+			sb.AppendLine (INDENT_1 + "public static void Bind(IntPtr L)");
+            sb.AppendLine(INDENT_1 + "{");
 
-			string[] files = Directory.GetFiles (LUA_WRAPFILE_DIR, "*.cs", SearchOption.TopDirectoryOnly);
+		    if (Directory.Exists(LUA_WRAPFILE_DIR))
+		    {
+                string[] files = Directory.GetFiles(LUA_WRAPFILE_DIR, "*.cs", SearchOption.TopDirectoryOnly);
 
-			for (int i = 0; i < files.Length; i++) {
-				string wrapName = Path.GetFileName (files [i]);
-				int pos = wrapName.LastIndexOf (".");
-				wrapName = wrapName.Substring (0, pos);
-				sb.AppendFormat ("\t\t{0}.Register(L);\r\n", wrapName);
-			}
+                for (int i = 0; i < files.Length; i++)
+                {
+                    string wrapName = Path.GetFileName(files[i]);
+                    int pos = wrapName.LastIndexOf(".");
+                    wrapName = wrapName.Substring(0, pos);
+                    sb.AppendFormat(INDENT_2 + "{0}.Register(L);\r\n", wrapName);
+                }
+		    }
+		    else
+		    {
+                LogManager.V(TAG, LUA_WRAPFILE_DIR + " not exists!");
+		    }
 
-			sb.AppendLine ("\t}");
-			sb.AppendLine ("}");
+            sb.AppendLine(INDENT_1 + "}");
+            sb.AppendLine("}");
 
 			using (StreamWriter textWriter = new StreamWriter (LUA_BINDER_FILE, false, Encoding.UTF8)) {
 				textWriter.Write (sb.ToString ());
@@ -340,9 +372,9 @@ namespace Lshain
 			sb.AppendLine ();
 			sb.AppendLine ("public static class LuaBinder");
 			sb.AppendLine ("{");
-			sb.AppendLine ("\tpublic static void Bind(IntPtr L)");
-			sb.AppendLine ("\t{");
-			sb.AppendLine ("\t}");
+            sb.AppendLine(INDENT_1 + "public static void Bind(IntPtr L)");
+            sb.AppendLine(INDENT_1 + "{");
+            sb.AppendLine(INDENT_1 + "}");
 			sb.AppendLine ("}");
 
 			using (StreamWriter textWriter = new StreamWriter (LUA_BINDER_FILE, false, Encoding.UTF8)) {
@@ -352,6 +384,8 @@ namespace Lshain
 			}
 
 			AssetDatabase.Refresh ();
+
+            LogManager.V("Clear lua binding files over");
 		}
 
 		public static DelegateType _DT (Type t)

@@ -15,11 +15,12 @@ namespace Lshain
 			dict.Add(typeof(Action<GameObject>), new DelegateValue(Action_GameObject));
 			dict.Add(typeof(Action), new DelegateValue(Action));
 			dict.Add(typeof(UnityEngine.Events.UnityAction), new DelegateValue(UnityEngine_Events_UnityAction));
-			dict.Add(typeof(System.Reflection.TypeFilter), new DelegateValue(System_Reflection_TypeFilter));
 			dict.Add(typeof(System.Reflection.MemberFilter), new DelegateValue(System_Reflection_MemberFilter));
+			dict.Add(typeof(System.Reflection.TypeFilter), new DelegateValue(System_Reflection_TypeFilter));
 			dict.Add(typeof(Camera.CameraCallback), new DelegateValue(Camera_CameraCallback));
 			dict.Add(typeof(AudioClip.PCMReaderCallback), new DelegateValue(AudioClip_PCMReaderCallback));
 			dict.Add(typeof(AudioClip.PCMSetPositionCallback), new DelegateValue(AudioClip_PCMSetPositionCallback));
+			dict.Add(typeof(Application.LogCallback), new DelegateValue(Application_LogCallback));
 		}
 
 		[NoToLuaAttribute]
@@ -29,7 +30,7 @@ namespace Lshain
 
 			if (!dict.TryGetValue(t, out create))
 			{
-	            LogManager.E("Delegate {0} not register", t.FullName);
+				LogManager.E("Delegate {0} not register", t.FullName);
 				return null;
 			}
 			return create(func);
@@ -66,13 +67,13 @@ namespace Lshain
 			return d;
 		}
 
-		public static Delegate System_Reflection_TypeFilter(LuaFunction func)
+		public static Delegate System_Reflection_MemberFilter(LuaFunction func)
 		{
-			System.Reflection.TypeFilter d = (param0, param1) =>
+			System.Reflection.MemberFilter d = (param0, param1) =>
 			{
 				int top = func.BeginPCall();
 				IntPtr L = func.GetLuaState();
-				LuaScriptMgr.Push(L, param0);
+				LuaScriptMgr.PushObject(L, param0);
 				LuaScriptMgr.PushVarObject(L, param1);
 				func.PCall(top, 2);
 				object[] objs = func.PopValues(top);
@@ -82,13 +83,13 @@ namespace Lshain
 			return d;
 		}
 
-		public static Delegate System_Reflection_MemberFilter(LuaFunction func)
+		public static Delegate System_Reflection_TypeFilter(LuaFunction func)
 		{
-			System.Reflection.MemberFilter d = (param0, param1) =>
+			System.Reflection.TypeFilter d = (param0, param1) =>
 			{
 				int top = func.BeginPCall();
 				IntPtr L = func.GetLuaState();
-				LuaScriptMgr.PushObject(L, param0);
+				LuaScriptMgr.Push(L, param0);
 				LuaScriptMgr.PushVarObject(L, param1);
 				func.PCall(top, 2);
 				object[] objs = func.PopValues(top);
@@ -137,5 +138,19 @@ namespace Lshain
 			return d;
 		}
 
+		public static Delegate Application_LogCallback(LuaFunction func)
+		{
+			Application.LogCallback d = (param0, param1, param2) =>
+			{
+				int top = func.BeginPCall();
+				IntPtr L = func.GetLuaState();
+				LuaScriptMgr.Push(L, param0);
+				LuaScriptMgr.Push(L, param1);
+				LuaScriptMgr.Push(L, param2);
+				func.PCall(top, 3);
+				func.EndPCall(top);
+			};
+			return d;
+		}
 	}
 }

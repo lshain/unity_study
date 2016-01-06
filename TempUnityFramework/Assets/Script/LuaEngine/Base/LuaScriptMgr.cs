@@ -1120,7 +1120,6 @@ namespace Lshain
 
 			object obj = GetLuaObject (L, stackPos);
 
-
 			if (obj == null) {
 				LuaDLL.luaL_argerror (L, stackPos, string.Format ("{0} expected, got nil", Type.Name));
 				return null;
