@@ -1,9 +1,12 @@
 ﻿using System;
 
-public static class LuaBinder
+namespace Lshain
 {
-    public static void Bind(IntPtr L)
-    {
-        
-    }
+	public static class LuaBinder
+	{
+	    public static void Bind(IntPtr L)
+	    {
+	        
+	    }
+	}
 }

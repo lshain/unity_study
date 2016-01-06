@@ -1,4 +1,4 @@
-namespace LuaInterface
+namespace Lshain
 {
 	using System;
 	using System.IO;

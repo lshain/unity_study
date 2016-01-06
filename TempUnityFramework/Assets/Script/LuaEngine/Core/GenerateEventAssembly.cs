@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
 
-namespace LuaInterface
+namespace Lshain
 {
     /*
      * Structure to store a Type and the return types of

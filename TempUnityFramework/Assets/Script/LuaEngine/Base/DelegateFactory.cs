@@ -1,139 +1,141 @@
 ﻿using System;
 using UnityEngine;
 using System.Collections.Generic;
-using LuaInterface;
 
-public static class DelegateFactory
+namespace Lshain
 {
-	delegate Delegate DelegateValue(LuaFunction func);
-	static Dictionary<Type, DelegateValue> dict = new Dictionary<Type, DelegateValue>();
-
-	[NoToLuaAttribute]
-	public static void Register(IntPtr L)
+	public static class DelegateFactory
 	{
-		dict.Add(typeof(Action<GameObject>), new DelegateValue(Action_GameObject));
-		dict.Add(typeof(Action), new DelegateValue(Action));
-		dict.Add(typeof(UnityEngine.Events.UnityAction), new DelegateValue(UnityEngine_Events_UnityAction));
-		dict.Add(typeof(System.Reflection.TypeFilter), new DelegateValue(System_Reflection_TypeFilter));
-		dict.Add(typeof(System.Reflection.MemberFilter), new DelegateValue(System_Reflection_MemberFilter));
-		dict.Add(typeof(Camera.CameraCallback), new DelegateValue(Camera_CameraCallback));
-		dict.Add(typeof(AudioClip.PCMReaderCallback), new DelegateValue(AudioClip_PCMReaderCallback));
-		dict.Add(typeof(AudioClip.PCMSetPositionCallback), new DelegateValue(AudioClip_PCMSetPositionCallback));
-	}
+		delegate Delegate DelegateValue(LuaFunction func);
+		static Dictionary<Type, DelegateValue> dict = new Dictionary<Type, DelegateValue>();
 
-	[NoToLuaAttribute]
-	public static Delegate CreateDelegate(Type t, LuaFunction func)
-	{
-		DelegateValue create = null;
-
-		if (!dict.TryGetValue(t, out create))
+		[NoToLuaAttribute]
+		public static void Register(IntPtr L)
 		{
-            LogManager.E("Delegate {0} not register", t.FullName);
-			return null;
+			dict.Add(typeof(Action<GameObject>), new DelegateValue(Action_GameObject));
+			dict.Add(typeof(Action), new DelegateValue(Action));
+			dict.Add(typeof(UnityEngine.Events.UnityAction), new DelegateValue(UnityEngine_Events_UnityAction));
+			dict.Add(typeof(System.Reflection.TypeFilter), new DelegateValue(System_Reflection_TypeFilter));
+			dict.Add(typeof(System.Reflection.MemberFilter), new DelegateValue(System_Reflection_MemberFilter));
+			dict.Add(typeof(Camera.CameraCallback), new DelegateValue(Camera_CameraCallback));
+			dict.Add(typeof(AudioClip.PCMReaderCallback), new DelegateValue(AudioClip_PCMReaderCallback));
+			dict.Add(typeof(AudioClip.PCMSetPositionCallback), new DelegateValue(AudioClip_PCMSetPositionCallback));
 		}
-		return create(func);
-	}
 
-	public static Delegate Action_GameObject(LuaFunction func)
-	{
-		Action<GameObject> d = (param0) =>
+		[NoToLuaAttribute]
+		public static Delegate CreateDelegate(Type t, LuaFunction func)
 		{
-			int top = func.BeginPCall();
-			IntPtr L = func.GetLuaState();
-			LuaScriptMgr.Push(L, param0);
-			func.PCall(top, 1);
-			func.EndPCall(top);
-		};
-		return d;
-	}
+			DelegateValue create = null;
 
-	public static Delegate Action(LuaFunction func)
-	{
-		Action d = () =>
+			if (!dict.TryGetValue(t, out create))
+			{
+	            LogManager.E("Delegate {0} not register", t.FullName);
+				return null;
+			}
+			return create(func);
+		}
+
+		public static Delegate Action_GameObject(LuaFunction func)
 		{
-			func.Call();
-		};
-		return d;
-	}
+			Action<GameObject> d = (param0) =>
+			{
+				int top = func.BeginPCall();
+				IntPtr L = func.GetLuaState();
+				LuaScriptMgr.Push(L, param0);
+				func.PCall(top, 1);
+				func.EndPCall(top);
+			};
+			return d;
+		}
 
-	public static Delegate UnityEngine_Events_UnityAction(LuaFunction func)
-	{
-		UnityEngine.Events.UnityAction d = () =>
+		public static Delegate Action(LuaFunction func)
 		{
-			func.Call();
-		};
-		return d;
-	}
+			Action d = () =>
+			{
+				func.Call();
+			};
+			return d;
+		}
 
-	public static Delegate System_Reflection_TypeFilter(LuaFunction func)
-	{
-		System.Reflection.TypeFilter d = (param0, param1) =>
+		public static Delegate UnityEngine_Events_UnityAction(LuaFunction func)
 		{
-			int top = func.BeginPCall();
-			IntPtr L = func.GetLuaState();
-			LuaScriptMgr.Push(L, param0);
-			LuaScriptMgr.PushVarObject(L, param1);
-			func.PCall(top, 2);
-			object[] objs = func.PopValues(top);
-			func.EndPCall(top);
-			return (bool)objs[0];
-		};
-		return d;
-	}
+			UnityEngine.Events.UnityAction d = () =>
+			{
+				func.Call();
+			};
+			return d;
+		}
 
-	public static Delegate System_Reflection_MemberFilter(LuaFunction func)
-	{
-		System.Reflection.MemberFilter d = (param0, param1) =>
+		public static Delegate System_Reflection_TypeFilter(LuaFunction func)
 		{
-			int top = func.BeginPCall();
-			IntPtr L = func.GetLuaState();
-			LuaScriptMgr.PushObject(L, param0);
-			LuaScriptMgr.PushVarObject(L, param1);
-			func.PCall(top, 2);
-			object[] objs = func.PopValues(top);
-			func.EndPCall(top);
-			return (bool)objs[0];
-		};
-		return d;
-	}
+			System.Reflection.TypeFilter d = (param0, param1) =>
+			{
+				int top = func.BeginPCall();
+				IntPtr L = func.GetLuaState();
+				LuaScriptMgr.Push(L, param0);
+				LuaScriptMgr.PushVarObject(L, param1);
+				func.PCall(top, 2);
+				object[] objs = func.PopValues(top);
+				func.EndPCall(top);
+				return (bool)objs[0];
+			};
+			return d;
+		}
 
-	public static Delegate Camera_CameraCallback(LuaFunction func)
-	{
-		Camera.CameraCallback d = (param0) =>
+		public static Delegate System_Reflection_MemberFilter(LuaFunction func)
 		{
-			int top = func.BeginPCall();
-			IntPtr L = func.GetLuaState();
-			LuaScriptMgr.Push(L, param0);
-			func.PCall(top, 1);
-			func.EndPCall(top);
-		};
-		return d;
-	}
+			System.Reflection.MemberFilter d = (param0, param1) =>
+			{
+				int top = func.BeginPCall();
+				IntPtr L = func.GetLuaState();
+				LuaScriptMgr.PushObject(L, param0);
+				LuaScriptMgr.PushVarObject(L, param1);
+				func.PCall(top, 2);
+				object[] objs = func.PopValues(top);
+				func.EndPCall(top);
+				return (bool)objs[0];
+			};
+			return d;
+		}
 
-	public static Delegate AudioClip_PCMReaderCallback(LuaFunction func)
-	{
-		AudioClip.PCMReaderCallback d = (param0) =>
+		public static Delegate Camera_CameraCallback(LuaFunction func)
 		{
-			int top = func.BeginPCall();
-			IntPtr L = func.GetLuaState();
-			LuaScriptMgr.PushArray(L, param0);
-			func.PCall(top, 1);
-			func.EndPCall(top);
-		};
-		return d;
-	}
+			Camera.CameraCallback d = (param0) =>
+			{
+				int top = func.BeginPCall();
+				IntPtr L = func.GetLuaState();
+				LuaScriptMgr.Push(L, param0);
+				func.PCall(top, 1);
+				func.EndPCall(top);
+			};
+			return d;
+		}
 
-	public static Delegate AudioClip_PCMSetPositionCallback(LuaFunction func)
-	{
-		AudioClip.PCMSetPositionCallback d = (param0) =>
+		public static Delegate AudioClip_PCMReaderCallback(LuaFunction func)
 		{
-			int top = func.BeginPCall();
-			IntPtr L = func.GetLuaState();
-			LuaScriptMgr.Push(L, param0);
-			func.PCall(top, 1);
-			func.EndPCall(top);
-		};
-		return d;
-	}
+			AudioClip.PCMReaderCallback d = (param0) =>
+			{
+				int top = func.BeginPCall();
+				IntPtr L = func.GetLuaState();
+				LuaScriptMgr.PushArray(L, param0);
+				func.PCall(top, 1);
+				func.EndPCall(top);
+			};
+			return d;
+		}
 
+		public static Delegate AudioClip_PCMSetPositionCallback(LuaFunction func)
+		{
+			AudioClip.PCMSetPositionCallback d = (param0) =>
+			{
+				int top = func.BeginPCall();
+				IntPtr L = func.GetLuaState();
+				LuaScriptMgr.Push(L, param0);
+				func.PCall(top, 1);
+				func.EndPCall(top);
+			};
+			return d;
+		}
+
+	}
 }

@@ -2,7 +2,7 @@
 #define __NOGEN__
 //#endif
 
-namespace LuaInterface
+namespace Lshain
 {
     using System;
     using System.IO;

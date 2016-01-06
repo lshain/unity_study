@@ -1,7 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public static class GlobalConst
+namespace Lshain
 {
+	public static class GlobalConst
+	{
 
+	}
 }
