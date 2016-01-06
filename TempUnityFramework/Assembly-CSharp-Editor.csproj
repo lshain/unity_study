@@ -45,9 +45,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Editor\LuaWrapGenTools\LuaWrapGen.cs" />
-     <Compile Include="Assets\Editor\LuaWrapGenTools\ToLuaExport.cs" />
+     <Compile Include="Assets\Editor\LuaEngineTools\LuaEngineTools.cs" />
+     <Compile Include="Assets\Editor\LuaEngineTools\ToLuaExport.cs" />
+     <None Include="Assets\Script\LuaEngine\Lua\readme.txt" />
+     <None Include="Assets\uLua\README.txt" />
      <None Include="Assets\ConsolePro\Readme.txt" />
+     <None Include="Assets\uLua\Example\04_ScriptsFromFile\ScriptsFromFile01.lua.txt" />
  <Reference Include="UnityEditor.Advertisements">
  <HintPath>D:/Program Files/Unity5/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/Editor/UnityEditor.Advertisements.dll</HintPath>
  </Reference>
