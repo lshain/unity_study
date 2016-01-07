@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Lshain
+namespace LT
 {
 	public class ScreenWrap
 	{
@@ -30,7 +30,7 @@ namespace Lshain
 				new LuaField("sleepTimeout", get_sleepTimeout, set_sleepTimeout),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.Screen", typeof(Screen), regs, fields, typeof(object));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.Screen", typeof(Screen), regs, fields, typeof(object));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

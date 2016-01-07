@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Lshain
+namespace LT
 {
 	public class InputWrap
 	{
@@ -58,7 +58,7 @@ namespace Lshain
 				new LuaField("backButtonLeavesApp", get_backButtonLeavesApp, set_backButtonLeavesApp),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.Input", typeof(Input), regs, fields, typeof(object));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.Input", typeof(Input), regs, fields, typeof(object));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

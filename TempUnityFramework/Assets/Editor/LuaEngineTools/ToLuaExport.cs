@@ -9,7 +9,7 @@ using Object = UnityEngine.Object;
 using System.IO;
 using System.Text.RegularExpressions;
 
-namespace Lshain
+namespace LT
 {
 	public enum MetaOp
 	{
@@ -61,13 +61,6 @@ namespace Lshain
 	public static class ToLuaExport
 	{
 		private static readonly string TAG = "ToLuaExport";
-
-		private static readonly string INDENT_NONE = "";
-		private static readonly string INDENT_1 = "\t";
-		private static readonly string INDENT_2 = "\t\t";
-		private static readonly string INDENT_3 = "\t\t\t";
-		private static readonly string INDENT_4 = "\t\t\t\t";
-		private static readonly string INDENT_5 = "\t\t\t\t\t";
 
 		public static string Name { get; set; }
 
@@ -203,7 +196,7 @@ namespace Lshain
 			LogManager.V ("Begin Generate lua Wrap for class {0}\r\n", Name);
 			sb = new StringBuilder ();
 
-			sb.AppendLine ("namespace Lshain");
+			sb.AppendLine ("namespace LT");
 			sb.AppendLine ("{");
 
 			usingList.Add ("System");
@@ -226,9 +219,9 @@ namespace Lshain
 			if (Type.IsEnum) {
 				GenEnum ();
 				GenEnumTranslator ();
-				sb.AppendLine (INDENT_1 + "}");
+				sb.AppendLine (GlobalConst.INDENT_1 + "}");
 				sb.AppendLine ("}");
-                SaveFile(LuaEngineTools.LUA_WRAPFILE_DIR + WrapFileName + "Wrap.cs");
+                SaveFile(GlobalConst.LUA_WRAPFILE_DIR + WrapFileName + "Wrap.cs");
 				return;
 			}
 
@@ -288,8 +281,8 @@ namespace Lshain
 
 			methods = list.ToArray ();
 
-            sb.AppendFormat(INDENT_1 + "public class {0}Wrap\r\n", WrapFileName);
-            sb.AppendLine(INDENT_1 + "{");
+            sb.AppendFormat(GlobalConst.INDENT_1 + "public class {0}Wrap\r\n", WrapFileName);
+            sb.AppendLine(GlobalConst.INDENT_1 + "{");
                 
 			GenRegFunc ();
 			GenConstruct ();
@@ -299,10 +292,10 @@ namespace Lshain
 			GenToStringFunc ();
 			GenFunction ();
 
-            sb.AppendLine(INDENT_1 + "}");
+            sb.AppendLine(GlobalConst.INDENT_1 + "}");
 			sb.AppendLine ("}");
             //LogManager.V(sb.ToString());                
-            SaveFile(LuaEngineTools.LUA_WRAPFILE_DIR + WrapFileName + "Wrap.cs");     
+            SaveFile(GlobalConst.LUA_WRAPFILE_DIR + WrapFileName + "Wrap.cs");     
 		}
 
 		static void SaveFile (string file)
@@ -365,34 +358,34 @@ namespace Lshain
 				return;
 			}
 
-            sb.AppendLine(INDENT_3 + "LuaField[] fields = new LuaField[]");
-            sb.AppendLine(INDENT_3 + "{");
+            sb.AppendLine(GlobalConst.INDENT_3 + "LuaField[] fields = new LuaField[]");
+            sb.AppendLine(GlobalConst.INDENT_3 + "{");
 
 			for (int i = 0; i < fields.Length; i++) {
 				if (fields [i].IsLiteral || fields [i].IsPrivate || fields [i].IsInitOnly) {
-                    sb.AppendFormat(INDENT_4 + "new LuaField(\"{0}\", get_{0}, null),\r\n", fields[i].Name);
+                    sb.AppendFormat(GlobalConst.INDENT_4 + "new LuaField(\"{0}\", get_{0}, null),\r\n", fields[i].Name);
 				} else {
-                    sb.AppendFormat(INDENT_4 + "new LuaField(\"{0}\", get_{0}, set_{0}),\r\n", fields[i].Name);
+                    sb.AppendFormat(GlobalConst.INDENT_4 + "new LuaField(\"{0}\", get_{0}, set_{0}),\r\n", fields[i].Name);
 				}
 			}
 
 			for (int i = 0; i < props.Length; i++) {                     
 				if (props [i].CanRead && props [i].CanWrite && props [i].GetSetMethod (true).IsPublic) {
-                    sb.AppendFormat(INDENT_4 + "new LuaField(\"{0}\", get_{0}, set_{0}),\r\n", props[i].Name);
+                    sb.AppendFormat(GlobalConst.INDENT_4 + "new LuaField(\"{0}\", get_{0}, set_{0}),\r\n", props[i].Name);
 				} else if (props [i].CanRead) {
-                    sb.AppendFormat(INDENT_4 + "new LuaField(\"{0}\", get_{0}, null),\r\n", props[i].Name);
+                    sb.AppendFormat(GlobalConst.INDENT_4 + "new LuaField(\"{0}\", get_{0}, null),\r\n", props[i].Name);
 				} else if (props [i].CanWrite) {
-                    sb.AppendFormat(INDENT_4 + "new LuaField(\"{0}\", null, set_{0}),\r\n", props[i].Name);
+                    sb.AppendFormat(GlobalConst.INDENT_4 + "new LuaField(\"{0}\", null, set_{0}),\r\n", props[i].Name);
 				}
 			}
 
-            sb.AppendLine(INDENT_3 + "};\r\n");
+            sb.AppendLine(GlobalConst.INDENT_3 + "};\r\n");
 		}
 
 		static void GenLuaMethods ()
 		{
-            sb.AppendLine(INDENT_3 + "LuaMethod[] regs = new LuaMethod[]");
-            sb.AppendLine(INDENT_3 + "{");
+            sb.AppendLine(GlobalConst.INDENT_3 + "LuaMethod[] regs = new LuaMethod[]");
+            sb.AppendLine(GlobalConst.INDENT_3 + "{");
 
 			//注册库函数
 			for (int i = 0; i < methods.Length; i++) {
@@ -405,7 +398,7 @@ namespace Lshain
 
 				if (!nameCounter.TryGetValue (m.Name, out count)) {
 					if (!m.Name.Contains ("op_")) {
-                        sb.AppendFormat(INDENT_4 + "new LuaMethod(\"{0}\", {0}),\r\n", m.Name);
+                        sb.AppendFormat(GlobalConst.INDENT_4 + "new LuaMethod(\"{0}\", {0}),\r\n", m.Name);
 					}
 
 					nameCounter [m.Name] = 1;
@@ -414,67 +407,67 @@ namespace Lshain
 				}
 			}
 
-            sb.AppendFormat(INDENT_4 + "new LuaMethod(\"New\", _Create{0}),\r\n", WrapFileName);
-            sb.AppendLine(INDENT_4 + "new LuaMethod(\"GetClassType\", GetClassType),");
+            sb.AppendFormat(GlobalConst.INDENT_4 + "new LuaMethod(\"New\", _Create{0}),\r\n", WrapFileName);
+            sb.AppendLine(GlobalConst.INDENT_4 + "new LuaMethod(\"GetClassType\", GetClassType),");
 
 			int index = Array.FindIndex<MethodInfo> (methods, (p) => {
 				return p.Name == "ToString";
 			});
 
 			if (index >= 0 && !IsStatic) {
-                sb.AppendLine(INDENT_4 + "new LuaMethod(\"__tostring\", Lua_ToString),");
+                sb.AppendLine(GlobalConst.INDENT_4 + "new LuaMethod(\"__tostring\", Lua_ToString),");
 			}
 
 			GenOperatorReg ();
-            sb.AppendLine(INDENT_3 + "};\r\n");        
+            sb.AppendLine(GlobalConst.INDENT_3 + "};\r\n");        
 		}
 
 		static void GenOperatorReg ()
 		{
 			if ((op & MetaOp.Add) != 0) {
-                sb.AppendLine(INDENT_4 + "new LuaMethod(\"__add\", Lua_Add),");                                            
+                sb.AppendLine(GlobalConst.INDENT_4 + "new LuaMethod(\"__add\", Lua_Add),");                                            
 			}
 
 			if ((op & MetaOp.Sub) != 0) {
-                sb.AppendLine(INDENT_4 + "new LuaMethod(\"__sub\", Lua_Sub),");
+                sb.AppendLine(GlobalConst.INDENT_4 + "new LuaMethod(\"__sub\", Lua_Sub),");
 			}
 
 			if ((op & MetaOp.Mul) != 0) {
-                sb.AppendLine(INDENT_4 + "new LuaMethod(\"__mul\", Lua_Mul),");
+                sb.AppendLine(GlobalConst.INDENT_4 + "new LuaMethod(\"__mul\", Lua_Mul),");
 			}
 
 			if ((op & MetaOp.Div) != 0) {
-                sb.AppendLine(INDENT_4 + "new LuaMethod(\"__div\", Lua_Div),");
+                sb.AppendLine(GlobalConst.INDENT_4 + "new LuaMethod(\"__div\", Lua_Div),");
 			}
 
 			if ((op & MetaOp.Eq) != 0) {
-                sb.AppendLine(INDENT_4 + "new LuaMethod(\"__eq\", Lua_Eq),");    
+                sb.AppendLine(GlobalConst.INDENT_4 + "new LuaMethod(\"__eq\", Lua_Eq),");    
 			}
 
 			if ((op & MetaOp.Neg) != 0) {
-                sb.AppendLine(INDENT_4 + "new LuaMethod(\"__unm\", Lua_Neg),");    
+                sb.AppendLine(GlobalConst.INDENT_4 + "new LuaMethod(\"__unm\", Lua_Neg),");    
 			}
 		}
 
 		static void GenRegFunc ()
 		{
-            sb.AppendLine(INDENT_2 + "public static void Register(IntPtr L)");
-            sb.AppendLine(INDENT_2 + "{");
+            sb.AppendLine(GlobalConst.INDENT_2 + "public static void Register(IntPtr L)");
+            sb.AppendLine(GlobalConst.INDENT_2 + "{");
 
 			GenLuaMethods ();
 			GenLuaFields ();
 
 			if (BaseName == null) {
 				if (IsStatic && fields.Length == 0 && props.Length == 0) {
-                    sb.AppendFormat(INDENT_3 + "LuaScriptMgr.RegisterLib(L, \"{0}\", regs);\r\n", LuaTableName);
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "LuaScriptMgr.RegisterLuaTable(L, \"{0}\", regs);\r\n", LuaTableName);
 				} else {
-                    sb.AppendFormat(INDENT_3 + "LuaScriptMgr.RegisterLib(L, \"{0}\", typeof({1}), regs, fields, null);\r\n", LuaTableName, Name);
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "LuaScriptMgr.RegisterLuaTable(L, \"{0}\", typeof({1}), regs, fields, null);\r\n", LuaTableName, Name);
 				}
 			} else {
-                sb.AppendFormat(INDENT_3 + "LuaScriptMgr.RegisterLib(L, \"{0}\", typeof({1}), regs, fields, typeof({2}));\r\n", LuaTableName, Name, BaseName);
+                sb.AppendFormat(GlobalConst.INDENT_3 + "LuaScriptMgr.RegisterLuaTable(L, \"{0}\", typeof({1}), regs, fields, typeof({2}));\r\n", LuaTableName, Name, BaseName);
 			}
 
-            sb.AppendLine(INDENT_2 + "}");
+            sb.AppendLine(GlobalConst.INDENT_2 + "}");
 		}
 
 		static bool IsParams (ParameterInfo param)
@@ -510,14 +503,14 @@ namespace Lshain
 				}
             
 				set.Add (m.Name);
-                sb.AppendLine("\r\n" + INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
-                sb.AppendFormat(INDENT_2 + "static int {0}(IntPtr L)\r\n", GetFuncName(m.Name));
-                sb.AppendLine(INDENT_2 + "{");
+                sb.AppendLine("\r\n" + GlobalConst.INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
+                sb.AppendFormat(GlobalConst.INDENT_2 + "static int {0}(IntPtr L)\r\n", GetFuncName(m.Name));
+                sb.AppendLine(GlobalConst.INDENT_2 + "{");
 
 				if (HasAttribute (m, typeof(OnlyGCAttribute))) {
-                    sb.AppendLine(INDENT_3 + "LuaScriptMgr.__gc(L);");
-                    sb.AppendLine(INDENT_3 + "return 0;");
-                    sb.AppendLine(INDENT_2 + "}");
+                    sb.AppendLine(GlobalConst.INDENT_3 + "LuaScriptMgr.__gc(L);");
+                    sb.AppendLine(GlobalConst.INDENT_3 + "return 0;");
+                    sb.AppendLine(GlobalConst.INDENT_2 + "}");
 					continue;
 				}
 
@@ -525,7 +518,7 @@ namespace Lshain
 					FieldInfo field = extendType.GetField (m.Name + "Defined");
 					string strfun = field.GetValue (null) as string;
 					sb.AppendLine (strfun);
-                    sb.AppendLine(INDENT_2 + "}");
+                    sb.AppendLine(GlobalConst.INDENT_2 + "}");
 					continue;
 				}            
             
@@ -535,26 +528,26 @@ namespace Lshain
 
 				if (!haveParams) {
 					int count = paramInfos.Length + offset - 1;
-                    sb.AppendFormat(INDENT_3 + "LuaScriptMgr.CheckArgsCount(L, {0});\r\n", count);
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "LuaScriptMgr.CheckArgsCount(L, {0});\r\n", count);
 				} else {
-                    sb.AppendLine(INDENT_3 + "int count = LuaDLL.lua_gettop(L);");
+                    sb.AppendLine(GlobalConst.INDENT_3 + "int count = LuaDLL.lua_gettop(L);");
 				}
 
 				int rc = m.ReturnType == typeof(void) ? 0 : 1;
 				rc += ProcessParams (m, 3, false, false);
-                sb.AppendFormat(INDENT_3 + "return {0};\r\n", rc);
-                sb.AppendLine(INDENT_2 + "}");
+                sb.AppendFormat(GlobalConst.INDENT_3 + "return {0};\r\n", rc);
+                sb.AppendLine(GlobalConst.INDENT_2 + "}");
 			}
 		}
 
 		static void NoConsturct ()
 		{
-            sb.AppendLine("\r\n" + INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
-            sb.AppendFormat(INDENT_2 + "static int _Create{0}(IntPtr L)\r\n", WrapFileName);
-            sb.AppendLine(INDENT_2 + "{");
-            sb.AppendFormat(INDENT_3 + "LuaDLL.luaL_error(L, \"{0} class does not have a constructor function\");\r\n", Name);
-            sb.AppendLine(INDENT_3 + "return 0;");
-            sb.AppendLine(INDENT_2 + "}");
+            sb.AppendLine("\r\n" + GlobalConst.INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
+            sb.AppendFormat(GlobalConst.INDENT_2 + "static int _Create{0}(IntPtr L)\r\n", WrapFileName);
+            sb.AppendLine(GlobalConst.INDENT_2 + "{");
+            sb.AppendFormat(GlobalConst.INDENT_3 + "LuaDLL.luaL_error(L, \"{0} class does not have a constructor function\");\r\n", Name);
+            sb.AppendLine(GlobalConst.INDENT_3 + "return 0;");
+            sb.AppendLine(GlobalConst.INDENT_2 + "}");
 		}
 
 		static string GetPushFunction (Type t)
@@ -581,15 +574,15 @@ namespace Lshain
 
 		static void DefaultConstruct ()
 		{
-            sb.AppendLine("\r\n" + INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
-            sb.AppendFormat(INDENT_2 + "static int _Create{0}(IntPtr L)\r\n", WrapFileName);
-            sb.AppendLine(INDENT_2 + "{");
-            sb.AppendLine(INDENT_3 + "LuaScriptMgr.CheckArgsCount(L, 0);");
-            sb.AppendFormat(INDENT_3 + "{0} obj = new {0}();\r\n", Name);
+            sb.AppendLine("\r\n" + GlobalConst.INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
+            sb.AppendFormat(GlobalConst.INDENT_2 + "static int _Create{0}(IntPtr L)\r\n", WrapFileName);
+            sb.AppendLine(GlobalConst.INDENT_2 + "{");
+            sb.AppendLine(GlobalConst.INDENT_3 + "LuaScriptMgr.CheckArgsCount(L, 0);");
+            sb.AppendFormat(GlobalConst.INDENT_3 + "{0} obj = new {0}();\r\n", Name);
 			string str = GetPushFunction (Type);
-            sb.AppendFormat(INDENT_3 + "LuaScriptMgr.{0}(L, obj);\r\n", str);
-            sb.AppendLine(INDENT_3 + "return 1;");
-            sb.AppendLine(INDENT_2 + "}");
+            sb.AppendFormat(GlobalConst.INDENT_3 + "LuaScriptMgr.{0}(L, obj);\r\n", str);
+            sb.AppendLine(GlobalConst.INDENT_3 + "return 1;");
+            sb.AppendLine(GlobalConst.INDENT_2 + "}");
 		}
 
 		static string GetCountStr (int count)
@@ -603,16 +596,16 @@ namespace Lshain
 
 		static void GenGetType ()
 		{
-            sb.AppendFormat("\r\n" + INDENT_2 + "static Type classType = typeof({0});\r\n", Name);
+            sb.AppendFormat("\r\n" + GlobalConst.INDENT_2 + "static Type classType = typeof({0});\r\n", Name);
 
-            sb.AppendLine("\r\n" + INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
+            sb.AppendLine("\r\n" + GlobalConst.INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
             
-            sb.AppendFormat(INDENT_2 + "static int {0}(IntPtr L)\r\n", "GetClassType");
+            sb.AppendFormat(GlobalConst.INDENT_2 + "static int {0}(IntPtr L)\r\n", "GetClassType");
             
-            sb.AppendLine(INDENT_2 + "{");
-            sb.AppendLine(INDENT_3 + "LuaScriptMgr.Push(L, classType);");
-            sb.AppendLine(INDENT_3 + "return 1;");
-            sb.AppendLine(INDENT_2 + "}");
+            sb.AppendLine(GlobalConst.INDENT_2 + "{");
+            sb.AppendLine(GlobalConst.INDENT_3 + "LuaScriptMgr.Push(L, classType);");
+            sb.AppendLine(GlobalConst.INDENT_3 + "return 1;");
+            sb.AppendLine(GlobalConst.INDENT_2 + "}");
 		}
 
 		static void GenConstruct ()
@@ -629,15 +622,15 @@ namespace Lshain
 
 				if (ctorExtends != null && ctorExtends.Length > 0) {
 					if (HasAttribute (ctorExtends [0], typeof(UseDefinedAttribute))) {
-                        sb.AppendLine("\r\n" + INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
-                        sb.AppendFormat(INDENT_2 + "static int _Create{0}(IntPtr L)\r\n", WrapFileName);
-                        sb.AppendLine(INDENT_2 + "{");
+                        sb.AppendLine("\r\n" + GlobalConst.INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
+                        sb.AppendFormat(GlobalConst.INDENT_2 + "static int _Create{0}(IntPtr L)\r\n", WrapFileName);
+                        sb.AppendLine(GlobalConst.INDENT_2 + "{");
 
 						if (HasAttribute (ctorExtends [0], typeof(UseDefinedAttribute))) {
 							FieldInfo field = extendType.GetField (extendName + "Defined");
 							string strfun = field.GetValue (null) as string;
 							sb.AppendLine (strfun);
-                            sb.AppendLine(INDENT_2 + "}");
+                            sb.AppendLine(GlobalConst.INDENT_2 + "}");
 							return;
 						}
 					}
@@ -696,10 +689,10 @@ namespace Lshain
 
 			list.Sort (Compare);
 
-            sb.AppendLine("\r\n" + INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
-            sb.AppendFormat(INDENT_2 + "static int _Create{0}(IntPtr L)\r\n", WrapFileName);
-            sb.AppendLine(INDENT_2 + "{");
-            sb.AppendLine(INDENT_3 + "int count = LuaDLL.lua_gettop(L);\r\n");          
+            sb.AppendLine("\r\n" + GlobalConst.INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
+            sb.AppendFormat(GlobalConst.INDENT_2 + "static int _Create{0}(IntPtr L)\r\n", WrapFileName);
+            sb.AppendLine(GlobalConst.INDENT_2 + "{");
+            sb.AppendLine(GlobalConst.INDENT_3 + "int count = LuaDLL.lua_gettop(L);\r\n");          
 
 			List<ConstructorInfo> countList = new List<ConstructorInfo> ();
 
@@ -729,25 +722,25 @@ namespace Lshain
 
 				if (paramInfos.Length > 1) {                
 					string strParams = GenParamTypes (paramInfos, true);
-                    sb.AppendFormat(INDENT_3 + "if (LuaScriptMgr.CheckTypes(L, 1, {0}) && LuaScriptMgr.CheckParamsType(L, typeof({1}), {2}, {3}))\r\n", strParams, str, paramInfos.Length, GetCountStr(paramInfos.Length - 1));
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "if (LuaScriptMgr.CheckTypes(L, 1, {0}) && LuaScriptMgr.CheckParamsType(L, typeof({1}), {2}, {3}))\r\n", strParams, str, paramInfos.Length, GetCountStr(paramInfos.Length - 1));
 				} else {
-                    sb.AppendFormat(INDENT_3 + "if (LuaScriptMgr.CheckParamsType(L, typeof({0}), {1}, {2}))\r\n", str, paramInfos.Length, GetCountStr(paramInfos.Length - 1));
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "if (LuaScriptMgr.CheckParamsType(L, typeof({0}), {1}, {2}))\r\n", str, paramInfos.Length, GetCountStr(paramInfos.Length - 1));
 				}
 			} else {
 				ParameterInfo[] paramInfos = md.GetParameters ();
 
 				if (list.Count == 1 || md.GetParameters ().Length != list [1].GetParameters ().Length) {
-                    sb.AppendFormat(INDENT_3 + "if (count == {0})\r\n", paramInfos.Length);
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "if (count == {0})\r\n", paramInfos.Length);
 				} else {                
 					string strParams = GenParamTypes (paramInfos, true);
-                    sb.AppendFormat(INDENT_3 + "if (count == {0} && LuaScriptMgr.CheckTypes(L, 1, {1}))\r\n", paramInfos.Length, strParams);
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "if (count == {0} && LuaScriptMgr.CheckTypes(L, 1, {1}))\r\n", paramInfos.Length, strParams);
 				}
 			}
 
-            sb.AppendLine(INDENT_3 + "{");
+            sb.AppendLine(GlobalConst.INDENT_3 + "{");
 			int rc = ProcessParams (md, 4, true, list.Count > 1);
-            sb.AppendFormat(INDENT_4 + "return {0};\r\n", rc);
-            sb.AppendLine(INDENT_3 + "}");
+            sb.AppendFormat(GlobalConst.INDENT_4 + "return {0};\r\n", rc);
+            sb.AppendLine(GlobalConst.INDENT_3 + "}");
 
 			for (int i = 1; i < list.Count; i++) {
 				hasEmptyCon = list [i].GetParameters ().Length == 0 ? true : hasEmptyCon;
@@ -757,9 +750,9 @@ namespace Lshain
 				if (!HasOptionalParam (md.GetParameters ())) {
 					if (countList.Contains (list [i])) {                    
 						string strParams = GenParamTypes (paramInfos, true);
-                        sb.AppendFormat(INDENT_3 + "else if (count == {0} && LuaScriptMgr.CheckTypes(L, 1, {1}))\r\n", paramInfos.Length, strParams);
+                        sb.AppendFormat(GlobalConst.INDENT_3 + "else if (count == {0} && LuaScriptMgr.CheckTypes(L, 1, {1}))\r\n", paramInfos.Length, strParams);
 					} else {
-                        sb.AppendFormat(INDENT_3 + "else if (count == {0})\r\n", paramInfos.Length);
+                        sb.AppendFormat(GlobalConst.INDENT_3 + "else if (count == {0})\r\n", paramInfos.Length);
 					}
 				} else {                
 					ParameterInfo param = paramInfos [paramInfos.Length - 1];
@@ -767,36 +760,36 @@ namespace Lshain
 
 					if (paramInfos.Length > 1) {                                        
 						string strParams = GenParamTypes (paramInfos, true);
-                        sb.AppendFormat(INDENT_3 + "else if (LuaScriptMgr.CheckTypes(L, 1, {0}) && LuaScriptMgr.CheckParamsType(L, typeof({1}), {2}, {3}))\r\n", strParams, str, paramInfos.Length, GetCountStr(paramInfos.Length - 1));
+                        sb.AppendFormat(GlobalConst.INDENT_3 + "else if (LuaScriptMgr.CheckTypes(L, 1, {0}) && LuaScriptMgr.CheckParamsType(L, typeof({1}), {2}, {3}))\r\n", strParams, str, paramInfos.Length, GetCountStr(paramInfos.Length - 1));
 					} else {
-                        sb.AppendFormat(INDENT_3 + "else if (LuaScriptMgr.CheckParamsType(L, typeof({0}), {1}, {2}))\r\n", str, paramInfos.Length, GetCountStr(paramInfos.Length - 1));
+                        sb.AppendFormat(GlobalConst.INDENT_3 + "else if (LuaScriptMgr.CheckParamsType(L, typeof({0}), {1}, {2}))\r\n", str, paramInfos.Length, GetCountStr(paramInfos.Length - 1));
 					}
 				}
 
-                sb.AppendLine(INDENT_3 + "{");            
+                sb.AppendLine(GlobalConst.INDENT_3 + "{");            
 				rc = ProcessParams (md, 4, true, true);
-                sb.AppendFormat(INDENT_4 + "return {0};\r\n", rc);
-                sb.AppendLine(INDENT_3 + "}");
+                sb.AppendFormat(GlobalConst.INDENT_4 + "return {0};\r\n", rc);
+                sb.AppendLine(GlobalConst.INDENT_3 + "}");
 			}
 
 			if (Type.IsValueType && !hasEmptyCon) {
-                sb.AppendLine(INDENT_3 + "else if (count == 0)");
-                sb.AppendLine(INDENT_3 + "{");
-                sb.AppendFormat(INDENT_4 + "{0} obj = new {0}();\r\n", Name);            
+                sb.AppendLine(GlobalConst.INDENT_3 + "else if (count == 0)");
+                sb.AppendLine(GlobalConst.INDENT_3 + "{");
+                sb.AppendFormat(GlobalConst.INDENT_4 + "{0} obj = new {0}();\r\n", Name);            
 				string str = GetPushFunction (Type);
-                sb.AppendFormat(INDENT_4 + "LuaScriptMgr.{0}(L, obj);\r\n", str);
-                sb.AppendLine(INDENT_4 + "return 1;");
-                sb.AppendLine(INDENT_3 + "}");
+                sb.AppendFormat(GlobalConst.INDENT_4 + "LuaScriptMgr.{0}(L, obj);\r\n", str);
+                sb.AppendLine(GlobalConst.INDENT_4 + "return 1;");
+                sb.AppendLine(GlobalConst.INDENT_3 + "}");
 			}
 
-            sb.AppendLine(INDENT_3 + "else");
-            sb.AppendLine(INDENT_3 + "{");
-            sb.AppendFormat(INDENT_4 + "LuaDLL.luaL_error(L, \"invalid arguments to method: {0}.New\");\r\n", Name);
-            sb.AppendLine(INDENT_3 + "}");
+            sb.AppendLine(GlobalConst.INDENT_3 + "else");
+            sb.AppendLine(GlobalConst.INDENT_3 + "{");
+            sb.AppendFormat(GlobalConst.INDENT_4 + "LuaDLL.luaL_error(L, \"invalid arguments to method: {0}.New\");\r\n", Name);
+            sb.AppendLine(GlobalConst.INDENT_3 + "}");
 
 			sb.AppendLine ();
-            sb.AppendLine(INDENT_3 + "return 0;");
-            sb.AppendLine(INDENT_2 + "}");
+            sb.AppendLine(GlobalConst.INDENT_3 + "return 0;");
+            sb.AppendLine(GlobalConst.INDENT_2 + "}");
 		}
 
 
@@ -1342,10 +1335,10 @@ namespace Lshain
 
 			list.Sort (Compare);
 
-            sb.AppendLine("\r\n" + INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
-            sb.AppendFormat(INDENT_2 + "static int {0}(IntPtr L)\r\n", GetFuncName(name));
-            sb.AppendLine(INDENT_2 + "{");
-            sb.AppendLine(INDENT_3 + "int count = LuaDLL.lua_gettop(L);");        
+            sb.AppendLine("\r\n" + GlobalConst.INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
+            sb.AppendFormat(GlobalConst.INDENT_2 + "static int {0}(IntPtr L)\r\n", GetFuncName(name));
+            sb.AppendLine(GlobalConst.INDENT_2 + "{");
+            sb.AppendLine(GlobalConst.INDENT_3 + "int count = LuaDLL.lua_gettop(L);");        
 
 			List<MethodInfo> countList = new List<MethodInfo> ();
 
@@ -1380,13 +1373,13 @@ namespace Lshain
 
 				if (paramInfos.Length > 1) {                
 					string strParams = GenParamTypes (paramInfos, md.IsStatic);
-                    sb.AppendFormat(INDENT_3 + "if (LuaScriptMgr.CheckTypes(L, 1, {1}) && LuaScriptMgr.CheckParamsType(L, typeof({2}), {3}, {4}))\r\n", beginPos, strParams, str, paramInfos.Length + offset, GetCountStr(paramInfos.Length + offset - 1));
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "if (LuaScriptMgr.CheckTypes(L, 1, {1}) && LuaScriptMgr.CheckParamsType(L, typeof({2}), {3}, {4}))\r\n", beginPos, strParams, str, paramInfos.Length + offset, GetCountStr(paramInfos.Length + offset - 1));
 				} else {
-                    sb.AppendFormat(INDENT_3 + "if (LuaScriptMgr.CheckParamsType(L, typeof({0}), {1}, {2}))\r\n", str, paramInfos.Length + offset, GetCountStr(paramInfos.Length + offset - 1));
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "if (LuaScriptMgr.CheckParamsType(L, typeof({0}), {1}, {2}))\r\n", str, paramInfos.Length + offset, GetCountStr(paramInfos.Length + offset - 1));
 				}
 			} else {
 				if (c1 != c2) {
-                    sb.AppendFormat(INDENT_3 + "if (count == {0})\r\n", md.GetParameters().Length + offset);
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "if (count == {0})\r\n", md.GetParameters().Length + offset);
 					noLuaString = false;
 					beCheckTypes = false;
 				} else {                                
@@ -1394,17 +1387,17 @@ namespace Lshain
 
 					if (paramInfos.Length > 0) {
 						string strParams = GenParamTypes (paramInfos, md.IsStatic);
-                        sb.AppendFormat(INDENT_3 + "if (count == {0} && LuaScriptMgr.CheckTypes(L, 1, {2}))\r\n", paramInfos.Length + offset, beginPos, strParams);
+                        sb.AppendFormat(GlobalConst.INDENT_3 + "if (count == {0} && LuaScriptMgr.CheckTypes(L, 1, {2}))\r\n", paramInfos.Length + offset, beginPos, strParams);
 					} else {
-                        sb.AppendFormat(INDENT_3 + "if (count == {0})\r\n", paramInfos.Length + offset);
+                        sb.AppendFormat(GlobalConst.INDENT_3 + "if (count == {0})\r\n", paramInfos.Length + offset);
 					}
 				}
 			}
 
-            sb.AppendLine(INDENT_3 + "{");
+            sb.AppendLine(GlobalConst.INDENT_3 + "{");
 			int count = ProcessParams (md, 4, false, (list.Count > 1) && noLuaString, beCheckTypes);
-            sb.AppendFormat(INDENT_4 + "return {0};\r\n", ret + count);
-            sb.AppendLine(INDENT_3 + "}");
+            sb.AppendFormat(GlobalConst.INDENT_4 + "return {0};\r\n", ret + count);
+            sb.AppendLine(GlobalConst.INDENT_3 + "}");
 			//int offset = md.IsStatic ? 1 : 2;        
 
 			for (int i = 1; i < list.Count; i++) {
@@ -1420,9 +1413,9 @@ namespace Lshain
 
 					if (countList.Contains (list [i])) {                                    
 						string strParams = GenParamTypes (paramInfos, md.IsStatic);
-                        sb.AppendFormat(INDENT_3 + "else if (count == {0} && LuaScriptMgr.CheckTypes(L, 1, {2}))\r\n", paramInfos.Length + offset, beginPos, strParams);
+                        sb.AppendFormat(GlobalConst.INDENT_3 + "else if (count == {0} && LuaScriptMgr.CheckTypes(L, 1, {2}))\r\n", paramInfos.Length + offset, beginPos, strParams);
 					} else {
-                        sb.AppendFormat(INDENT_3 + "else if (count == {0})\r\n", paramInfos.Length + offset);
+                        sb.AppendFormat(GlobalConst.INDENT_3 + "else if (count == {0})\r\n", paramInfos.Length + offset);
 						noLuaString = false;
 						beCheckTypes = false;
 					}
@@ -1433,26 +1426,26 @@ namespace Lshain
 
 					if (paramInfos.Length > 1) {                    
 						string strParams = GenParamTypes (paramInfos, md.IsStatic);
-                        sb.AppendFormat(INDENT_3 + "else if (LuaScriptMgr.CheckTypes(L, 1, {1}) && LuaScriptMgr.CheckParamsType(L, typeof({2}), {3}, {4}))\r\n", beginPos, strParams, str, paramInfos.Length + offset, GetCountStr(paramInfos.Length + offset - 1));
+                        sb.AppendFormat(GlobalConst.INDENT_3 + "else if (LuaScriptMgr.CheckTypes(L, 1, {1}) && LuaScriptMgr.CheckParamsType(L, typeof({2}), {3}, {4}))\r\n", beginPos, strParams, str, paramInfos.Length + offset, GetCountStr(paramInfos.Length + offset - 1));
 					} else {
-                        sb.AppendFormat(INDENT_3 + "else if (LuaScriptMgr.CheckParamsType(L, typeof({0}), {1}, {2}))\r\n", str, paramInfos.Length + offset, GetCountStr(paramInfos.Length + offset - 1));
+                        sb.AppendFormat(GlobalConst.INDENT_3 + "else if (LuaScriptMgr.CheckParamsType(L, typeof({0}), {1}, {2}))\r\n", str, paramInfos.Length + offset, GetCountStr(paramInfos.Length + offset - 1));
 					}
 				}
 
-                sb.AppendLine(INDENT_3 + "{");
+                sb.AppendLine(GlobalConst.INDENT_3 + "{");
 				count = ProcessParams (md, 4, false, noLuaString, beCheckTypes);
-                sb.AppendFormat(INDENT_4 + "return {0};\r\n", ret + count);
-                sb.AppendLine(INDENT_3 + "}");
+                sb.AppendFormat(GlobalConst.INDENT_4 + "return {0};\r\n", ret + count);
+                sb.AppendLine(GlobalConst.INDENT_3 + "}");
 			}
 
-            sb.AppendLine(INDENT_3 + "else");
-            sb.AppendLine(INDENT_3 + "{");
-            sb.AppendFormat(INDENT_4 + "LuaDLL.luaL_error(L, \"invalid arguments to method: {0}.{1}\");\r\n", Name, name);
-            sb.AppendLine(INDENT_3 + "}");        
+            sb.AppendLine(GlobalConst.INDENT_3 + "else");
+            sb.AppendLine(GlobalConst.INDENT_3 + "{");
+            sb.AppendFormat(GlobalConst.INDENT_4 + "LuaDLL.luaL_error(L, \"invalid arguments to method: {0}.{1}\");\r\n", Name, name);
+            sb.AppendLine(GlobalConst.INDENT_3 + "}");        
 
 			sb.AppendLine ();
-            sb.AppendLine(INDENT_3 + "return 0;");
-            sb.AppendLine(INDENT_2 + "}");
+            sb.AppendLine(GlobalConst.INDENT_3 + "return 0;");
+            sb.AppendLine(GlobalConst.INDENT_2 + "}");
 
 			return null;
 		}
@@ -1670,55 +1663,55 @@ namespace Lshain
 		static void CheckObjectNull ()
 		{
 			if (Type.IsValueType) {
-                sb.AppendLine(INDENT_3 + "if (o == null)");
+                sb.AppendLine(GlobalConst.INDENT_3 + "if (o == null)");
 			} else {
-                sb.AppendLine(INDENT_3 + "if (obj == null)");
+                sb.AppendLine(GlobalConst.INDENT_3 + "if (obj == null)");
 			}
 		}
 
 		static void GenIndexFunc ()
 		{
 			for (int i = 0; i < fields.Length; i++) {
-                sb.AppendLine("\r\n" + INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
-                sb.AppendFormat(INDENT_2 + "static int get_{0}(IntPtr L)\r\n", fields[i].Name);
-                sb.AppendLine(INDENT_2 + "{");
+                sb.AppendLine("\r\n" + GlobalConst.INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
+                sb.AppendFormat(GlobalConst.INDENT_2 + "static int get_{0}(IntPtr L)\r\n", fields[i].Name);
+                sb.AppendLine(GlobalConst.INDENT_2 + "{");
 
 				string str = GetPushFunction (fields [i].FieldType);
 
 				if (fields [i].IsStatic) {
-                    sb.AppendFormat(INDENT_3 + "LuaScriptMgr.{2}(L, {0}.{1});\r\n", Name, fields[i].Name, str);                
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "LuaScriptMgr.{2}(L, {0}.{1});\r\n", Name, fields[i].Name, str);                
 				} else {
-                    sb.AppendFormat(INDENT_3 + "object o = LuaScriptMgr.GetLuaObject(L, 1);\r\n");
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "object o = LuaScriptMgr.GetLuaObject(L, 1);\r\n");
 
 					if (!Type.IsValueType) {
-                        sb.AppendFormat(INDENT_3 + "{0} obj = ({0})o;\r\n", Name);
+                        sb.AppendFormat(GlobalConst.INDENT_3 + "{0} obj = ({0})o;\r\n", Name);
 					}
 
 					sb.AppendLine ();
 					CheckObjectNull ();
-                    sb.AppendLine(INDENT_3 + "{");
-                    sb.AppendLine(INDENT_4 + "LuaTypes types = LuaDLL.lua_type(L, 1);");
+                    sb.AppendLine(GlobalConst.INDENT_3 + "{");
+                    sb.AppendLine(GlobalConst.INDENT_4 + "LuaTypes types = LuaDLL.lua_type(L, 1);");
 					sb.AppendLine ();
-                    sb.AppendLine(INDENT_4 + "if (types == LuaTypes.LUA_TTABLE)");
-                    sb.AppendLine(INDENT_4 + "{");
-                    sb.AppendFormat(INDENT_5 + "LuaDLL.luaL_error(L, \"unknown member name {0}\");\r\n", fields[i].Name);
-                    sb.AppendLine(INDENT_4 + "}");
-                    sb.AppendLine(INDENT_4 + "else");
-                    sb.AppendLine(INDENT_4 + "{");
-                    sb.AppendFormat(INDENT_5 + "LuaDLL.luaL_error(L, \"attempt to index {0} on a nil value\");\r\n", fields[i].Name);
-                    sb.AppendLine(INDENT_4 + "}");
-                    sb.AppendLine(INDENT_3 + "}");
+                    sb.AppendLine(GlobalConst.INDENT_4 + "if (types == LuaTypes.LUA_TTABLE)");
+                    sb.AppendLine(GlobalConst.INDENT_4 + "{");
+                    sb.AppendFormat(GlobalConst.INDENT_5 + "LuaDLL.luaL_error(L, \"unknown member name {0}\");\r\n", fields[i].Name);
+                    sb.AppendLine(GlobalConst.INDENT_4 + "}");
+                    sb.AppendLine(GlobalConst.INDENT_4 + "else");
+                    sb.AppendLine(GlobalConst.INDENT_4 + "{");
+                    sb.AppendFormat(GlobalConst.INDENT_5 + "LuaDLL.luaL_error(L, \"attempt to index {0} on a nil value\");\r\n", fields[i].Name);
+                    sb.AppendLine(GlobalConst.INDENT_4 + "}");
+                    sb.AppendLine(GlobalConst.INDENT_3 + "}");
 					sb.AppendLine ();
 
 					if (Type.IsValueType) {
-                        sb.AppendFormat(INDENT_3 + "{0} obj = ({0})o;\r\n", Name);
+                        sb.AppendFormat(GlobalConst.INDENT_3 + "{0} obj = ({0})o;\r\n", Name);
 					}
 
-                    sb.AppendFormat(INDENT_3 + "LuaScriptMgr.{1}(L, obj.{0});\r\n", fields[i].Name, str);
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "LuaScriptMgr.{1}(L, obj.{0});\r\n", fields[i].Name, str);
 				}
 
-                sb.AppendLine(INDENT_3 + "return 1;");
-                sb.AppendLine(INDENT_2 + "}");
+                sb.AppendLine(GlobalConst.INDENT_3 + "return 1;");
+                sb.AppendLine(GlobalConst.INDENT_2 + "}");
 			}
 
 			for (int i = 0; i < props.Length; i++) {
@@ -1733,46 +1726,46 @@ namespace Lshain
 					isStatic = false;
 				}
 
-                sb.AppendLine("\r\n" + INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
-                sb.AppendFormat(INDENT_2 + "static int get_{0}(IntPtr L)\r\n", props[i].Name);
-                sb.AppendLine(INDENT_2 + "{");
+                sb.AppendLine("\r\n" + GlobalConst.INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
+                sb.AppendFormat(GlobalConst.INDENT_2 + "static int get_{0}(IntPtr L)\r\n", props[i].Name);
+                sb.AppendLine(GlobalConst.INDENT_2 + "{");
 
 				string str = GetPushFunction (props [i].PropertyType);
 
 				if (isStatic) {
-                    sb.AppendFormat(INDENT_3 + "LuaScriptMgr.{2}(L, {0}.{1});\r\n", Name, props[i].Name, str);                
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "LuaScriptMgr.{2}(L, {0}.{1});\r\n", Name, props[i].Name, str);                
 				} else {
-                    sb.AppendFormat(INDENT_3 + "object o = LuaScriptMgr.GetLuaObject(L, 1);\r\n");                
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "object o = LuaScriptMgr.GetLuaObject(L, 1);\r\n");                
                 
 					if (!Type.IsValueType) {
-                        sb.AppendFormat(INDENT_3 + "{0} obj = ({0})o;\r\n", Name);
+                        sb.AppendFormat(GlobalConst.INDENT_3 + "{0} obj = ({0})o;\r\n", Name);
 					}
 
 					sb.AppendLine ();
 					CheckObjectNull ();
-                    sb.AppendLine(INDENT_3 + "{");
-                    sb.AppendLine(INDENT_4 + "LuaTypes types = LuaDLL.lua_type(L, 1);");
+                    sb.AppendLine(GlobalConst.INDENT_3 + "{");
+                    sb.AppendLine(GlobalConst.INDENT_4 + "LuaTypes types = LuaDLL.lua_type(L, 1);");
 					sb.AppendLine ();
-                    sb.AppendLine(INDENT_4 + "if (types == LuaTypes.LUA_TTABLE)");
-                    sb.AppendLine(INDENT_4 + "{");
-                    sb.AppendFormat(INDENT_5 + "LuaDLL.luaL_error(L, \"unknown member name {0}\");\r\n", props[i].Name);
-                    sb.AppendLine(INDENT_4 + "}");
-                    sb.AppendLine(INDENT_4 + "else");
-                    sb.AppendLine(INDENT_4 + "{");
-                    sb.AppendFormat(INDENT_5 + "LuaDLL.luaL_error(L, \"attempt to index {0} on a nil value\");\r\n", props[i].Name);
-                    sb.AppendLine(INDENT_4 + "}");
-                    sb.AppendLine(INDENT_3 + "}");
+                    sb.AppendLine(GlobalConst.INDENT_4 + "if (types == LuaTypes.LUA_TTABLE)");
+                    sb.AppendLine(GlobalConst.INDENT_4 + "{");
+                    sb.AppendFormat(GlobalConst.INDENT_5 + "LuaDLL.luaL_error(L, \"unknown member name {0}\");\r\n", props[i].Name);
+                    sb.AppendLine(GlobalConst.INDENT_4 + "}");
+                    sb.AppendLine(GlobalConst.INDENT_4 + "else");
+                    sb.AppendLine(GlobalConst.INDENT_4 + "{");
+                    sb.AppendFormat(GlobalConst.INDENT_5 + "LuaDLL.luaL_error(L, \"attempt to index {0} on a nil value\");\r\n", props[i].Name);
+                    sb.AppendLine(GlobalConst.INDENT_4 + "}");
+                    sb.AppendLine(GlobalConst.INDENT_3 + "}");
 					sb.AppendLine ();
 
 					if (Type.IsValueType) {
-                        sb.AppendFormat(INDENT_3 + "{0} obj = ({0})o;\r\n", Name);
+                        sb.AppendFormat(GlobalConst.INDENT_3 + "{0} obj = ({0})o;\r\n", Name);
 					}
 
-                    sb.AppendFormat(INDENT_3 + "LuaScriptMgr.{1}(L, obj.{0});\r\n", props[i].Name, str);                
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "LuaScriptMgr.{1}(L, obj.{0});\r\n", props[i].Name, str);                
 				}
 
-                sb.AppendLine(INDENT_3 + "return 1;");
-                sb.AppendLine(INDENT_2 + "}");
+                sb.AppendLine(GlobalConst.INDENT_3 + "return 1;");
+                sb.AppendLine(GlobalConst.INDENT_2 + "}");
 			}
 		}
 
@@ -1783,48 +1776,48 @@ namespace Lshain
 					continue;
 				}
 
-                sb.AppendLine("\r\n" + INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
-                sb.AppendFormat(INDENT_2 + "static int set_{0}(IntPtr L)\r\n", fields[i].Name);
-                sb.AppendLine(INDENT_2 + "{");
+                sb.AppendLine("\r\n" + GlobalConst.INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
+                sb.AppendFormat(GlobalConst.INDENT_2 + "static int set_{0}(IntPtr L)\r\n", fields[i].Name);
+                sb.AppendLine(GlobalConst.INDENT_2 + "{");
 				string o = fields [i].IsStatic ? Name : "obj";                        
 
 				if (!fields [i].IsStatic) {
-                    sb.AppendFormat(INDENT_3 + "object o = LuaScriptMgr.GetLuaObject(L, 1);\r\n");                
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "object o = LuaScriptMgr.GetLuaObject(L, 1);\r\n");                
 
 					if (!Type.IsValueType) {
-                        sb.AppendFormat(INDENT_2 + "{0} obj = ({0})o;\r\n", Name);
+                        sb.AppendFormat(GlobalConst.INDENT_2 + "{0} obj = ({0})o;\r\n", Name);
 					}
 
 					sb.AppendLine ();
 					CheckObjectNull ();
-					sb.AppendLine (INDENT_3 + "{");
-                    sb.AppendLine(INDENT_4 + "LuaTypes types = LuaDLL.lua_type(L, 1);");
+					sb.AppendLine (GlobalConst.INDENT_3 + "{");
+                    sb.AppendLine(GlobalConst.INDENT_4 + "LuaTypes types = LuaDLL.lua_type(L, 1);");
 					sb.AppendLine ();
-                    sb.AppendLine(INDENT_4 + "if (types == LuaTypes.LUA_TTABLE)");
-                    sb.AppendLine(INDENT_4 + "{");
-                    sb.AppendFormat(INDENT_5 + "LuaDLL.luaL_error(L, \"unknown member name {0}\");\r\n", fields[i].Name);
-                    sb.AppendLine(INDENT_4 + "}");
-                    sb.AppendLine(INDENT_4 + "else");
-                    sb.AppendLine(INDENT_4 + "{");
-                    sb.AppendFormat(INDENT_5 + "LuaDLL.luaL_error(L, \"attempt to index {0} on a nil value\");\r\n", fields[i].Name);
-                    sb.AppendLine(INDENT_4 + "}");
-                    sb.AppendLine(INDENT_3 + "}");
+                    sb.AppendLine(GlobalConst.INDENT_4 + "if (types == LuaTypes.LUA_TTABLE)");
+                    sb.AppendLine(GlobalConst.INDENT_4 + "{");
+                    sb.AppendFormat(GlobalConst.INDENT_5 + "LuaDLL.luaL_error(L, \"unknown member name {0}\");\r\n", fields[i].Name);
+                    sb.AppendLine(GlobalConst.INDENT_4 + "}");
+                    sb.AppendLine(GlobalConst.INDENT_4 + "else");
+                    sb.AppendLine(GlobalConst.INDENT_4 + "{");
+                    sb.AppendFormat(GlobalConst.INDENT_5 + "LuaDLL.luaL_error(L, \"attempt to index {0} on a nil value\");\r\n", fields[i].Name);
+                    sb.AppendLine(GlobalConst.INDENT_4 + "}");
+                    sb.AppendLine(GlobalConst.INDENT_3 + "}");
 
 					sb.AppendLine ();
 
 					if (Type.IsValueType) {
-                        sb.AppendFormat(INDENT_3 + "{0} obj = ({0})o;\r\n", Name);
+                        sb.AppendFormat(GlobalConst.INDENT_3 + "{0} obj = ({0})o;\r\n", Name);
 					}
 				}
 
 				NewIndexSetValue (fields [i].FieldType, o, fields [i].Name);
 
 				if (!fields [i].IsStatic && Type.IsValueType) {
-                    sb.AppendLine(INDENT_3 + "LuaScriptMgr.SetValueObject(L, 1, obj);");
+                    sb.AppendLine(GlobalConst.INDENT_3 + "LuaScriptMgr.SetValueObject(L, 1, obj);");
 				}
 
-                sb.AppendLine(INDENT_3 + "return 0;");
-                sb.AppendLine(INDENT_2 + "}");
+                sb.AppendLine(GlobalConst.INDENT_3 + "return 0;");
+                sb.AppendLine(GlobalConst.INDENT_2 + "}");
 			}
 
 			for (int i = 0; i < props.Length; i++) {
@@ -1839,47 +1832,47 @@ namespace Lshain
 					isStatic = false;
 				}
 
-                sb.AppendLine("\r\n" + INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
-                sb.AppendFormat(INDENT_2 + "static int set_{0}(IntPtr L)\r\n", props[i].Name);
-                sb.AppendLine(INDENT_2 + "{");
+                sb.AppendLine("\r\n" + GlobalConst.INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
+                sb.AppendFormat(GlobalConst.INDENT_2 + "static int set_{0}(IntPtr L)\r\n", props[i].Name);
+                sb.AppendLine(GlobalConst.INDENT_2 + "{");
 				string o = isStatic ? Name : "obj";
 
 				if (!isStatic) {
-                    sb.AppendFormat(INDENT_3 + "object o = LuaScriptMgr.GetLuaObject(L, 1);\r\n");
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "object o = LuaScriptMgr.GetLuaObject(L, 1);\r\n");
 
 					if (!Type.IsValueType) {
-                        sb.AppendFormat(INDENT_3 + "{0} obj = ({0})o;\r\n", Name);
+                        sb.AppendFormat(GlobalConst.INDENT_3 + "{0} obj = ({0})o;\r\n", Name);
 					}
     
 					sb.AppendLine ();
 					CheckObjectNull ();
-                    sb.AppendLine(INDENT_3 + "{");
-                    sb.AppendLine(INDENT_4 + "LuaTypes types = LuaDLL.lua_type(L, 1);");
+                    sb.AppendLine(GlobalConst.INDENT_3 + "{");
+                    sb.AppendLine(GlobalConst.INDENT_4 + "LuaTypes types = LuaDLL.lua_type(L, 1);");
 					sb.AppendLine ();
-                    sb.AppendLine(INDENT_4 + "if (types == LuaTypes.LUA_TTABLE)");
-                    sb.AppendLine(INDENT_4 + "{");
-                    sb.AppendFormat(INDENT_5 + "LuaDLL.luaL_error(L, \"unknown member name {0}\");\r\n", props[i].Name);
-                    sb.AppendLine(INDENT_4 + "}");
-                    sb.AppendLine(INDENT_4 + "else");
-                    sb.AppendLine(INDENT_4 + "{");
-                    sb.AppendFormat(INDENT_5 + "LuaDLL.luaL_error(L, \"attempt to index {0} on a nil value\");\r\n", props[i].Name);
-                    sb.AppendLine(INDENT_4 + "}");
-                    sb.AppendLine(INDENT_3 + "}");
+                    sb.AppendLine(GlobalConst.INDENT_4 + "if (types == LuaTypes.LUA_TTABLE)");
+                    sb.AppendLine(GlobalConst.INDENT_4 + "{");
+                    sb.AppendFormat(GlobalConst.INDENT_5 + "LuaDLL.luaL_error(L, \"unknown member name {0}\");\r\n", props[i].Name);
+                    sb.AppendLine(GlobalConst.INDENT_4 + "}");
+                    sb.AppendLine(GlobalConst.INDENT_4 + "else");
+                    sb.AppendLine(GlobalConst.INDENT_4 + "{");
+                    sb.AppendFormat(GlobalConst.INDENT_5 + "LuaDLL.luaL_error(L, \"attempt to index {0} on a nil value\");\r\n", props[i].Name);
+                    sb.AppendLine(GlobalConst.INDENT_4 + "}");
+                    sb.AppendLine(GlobalConst.INDENT_3 + "}");
 					sb.AppendLine ();
 
 					if (Type.IsValueType) {
-                        sb.AppendFormat(INDENT_3 + "{0} obj = ({0})o;\r\n", Name);
+                        sb.AppendFormat(GlobalConst.INDENT_3 + "{0} obj = ({0})o;\r\n", Name);
 					}
 				}
 
 				NewIndexSetValue (props [i].PropertyType, o, props [i].Name);
 
 				if (!isStatic && Type.IsValueType) {
-                    sb.AppendLine(INDENT_3 + "LuaScriptMgr.SetValueObject(L, 1, obj);");
+                    sb.AppendLine(GlobalConst.INDENT_3 + "LuaScriptMgr.SetValueObject(L, 1, obj);");
 				}
 
-                sb.AppendLine(INDENT_3 + "return 0;");
-                sb.AppendLine(INDENT_2 + "}");
+                sb.AppendLine(GlobalConst.INDENT_3 + "return 0;");
+                sb.AppendLine(GlobalConst.INDENT_2 + "}");
 			}
 		}
 
@@ -1911,7 +1904,7 @@ namespace Lshain
 			}
 
 			sb.AppendFormat (") =>\r\n{0}{{\r\n{0}", head);
-            sb.AppendLine(INDENT_1 + "int top = func.BeginPCall();");
+            sb.AppendLine(GlobalConst.INDENT_1 + "int top = func.BeginPCall();");
 
 			if (!haveState) {
 				sb.AppendFormat ("{0}\tIntPtr L = func.GetLuaState();\r\n", head);
@@ -1942,69 +1935,69 @@ namespace Lshain
 				string atstr = GetTypeStr (et);
 
 				if (et == typeof(bool)) {
-                    sb.AppendFormat(INDENT_3 + "{0}.{1} = LuaScriptMgr.GetArrayBool(L, 3);\r\n", o, name);
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.{1} = LuaScriptMgr.GetArrayBool(L, 3);\r\n", o, name);
 				} else if (et.IsPrimitive) {
-                    sb.AppendFormat(INDENT_3 + "{0}.{1} = LuaScriptMgr.GetArrayNumber<{2}>(L, 3);\r\n", o, name, atstr);
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.{1} = LuaScriptMgr.GetArrayNumber<{2}>(L, 3);\r\n", o, name, atstr);
 				} else if (et == typeof(string)) {
-                    sb.AppendFormat(INDENT_3 + "{0}.{1} = LuaScriptMgr.GetArrayString(L, 3);\r\n", o, name);
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.{1} = LuaScriptMgr.GetArrayString(L, 3);\r\n", o, name);
 				} else {
 					if (et == typeof(UnityEngine.Object)) {
 						ambig |= ObjAmbig.U3dObj;
 					}
 
-                    sb.AppendFormat(INDENT_3 + "{0}.{1} = LuaScriptMgr.GetArrayObject<{2}>(L, 3);\r\n", o, name, atstr);
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.{1} = LuaScriptMgr.GetArrayObject<{2}>(L, 3);\r\n", o, name, atstr);
 				}
 
 				return;
 			}
 
 			if (t == typeof(bool)) {
-                sb.AppendFormat(INDENT_3 + "{0}.{1} = LuaScriptMgr.GetBoolean(L, 3);\r\n", o, name);
+                sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.{1} = LuaScriptMgr.GetBoolean(L, 3);\r\n", o, name);
 			} else if (t == typeof(string)) {
-                sb.AppendFormat(INDENT_3 + "{0}.{1} = LuaScriptMgr.GetString(L, 3);\r\n", o, name);
+                sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.{1} = LuaScriptMgr.GetString(L, 3);\r\n", o, name);
 			} else if (t.IsPrimitive) {
-                sb.AppendFormat(INDENT_3 + "{0}.{1} = ({2})LuaScriptMgr.GetNumber(L, 3);\r\n", o, name, _C(t.ToString()));
+                sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.{1} = ({2})LuaScriptMgr.GetNumber(L, 3);\r\n", o, name, _C(t.ToString()));
 			} else if (t == typeof(LuaFunction)) {
-                sb.AppendFormat(INDENT_3 + "{0}.{1} = LuaScriptMgr.GetLuaFunction(L, 3);\r\n", o, name);
+                sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.{1} = LuaScriptMgr.GetLuaFunction(L, 3);\r\n", o, name);
 			} else if (t == typeof(LuaTable)) {
-                sb.AppendFormat(INDENT_3 + "{0}.{1} = LuaScriptMgr.GetLuaTable(L, 3);\r\n", o, name);
+                sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.{1} = LuaScriptMgr.GetLuaTable(L, 3);\r\n", o, name);
 			} else if (t == typeof(object)) {
-                sb.AppendFormat(INDENT_3 + "{0}.{1} = LuaScriptMgr.GetVarObject(L, 3);\r\n", o, name);
+                sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.{1} = LuaScriptMgr.GetVarObject(L, 3);\r\n", o, name);
 			} else if (t == typeof(Vector3)) {
-                sb.AppendFormat(INDENT_3 + "{0}.{1} = LuaScriptMgr.GetVector3(L, 3);\r\n", o, name);
+                sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.{1} = LuaScriptMgr.GetVector3(L, 3);\r\n", o, name);
 			} else if (t == typeof(Quaternion)) {
-                sb.AppendFormat(INDENT_3 + "{0}.{1} = LuaScriptMgr.GetQuaternion(L, 3);\r\n", o, name);
+                sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.{1} = LuaScriptMgr.GetQuaternion(L, 3);\r\n", o, name);
 			} else if (t == typeof(Vector2)) {
-                sb.AppendFormat(INDENT_3 + "{0}.{1} = LuaScriptMgr.GetVector2(L, 3);\r\n", o, name);
+                sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.{1} = LuaScriptMgr.GetVector2(L, 3);\r\n", o, name);
 			} else if (t == typeof(Vector4)) {
-                sb.AppendFormat(INDENT_3 + "{0}.{1} = LuaScriptMgr.GetVector4(L, 3);\r\n", o, name);
+                sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.{1} = LuaScriptMgr.GetVector4(L, 3);\r\n", o, name);
 			} else if (t == typeof(Color)) {
-                sb.AppendFormat(INDENT_3 + "{0}.{1} = LuaScriptMgr.GetColor(L, 3);\r\n", o, name);
+                sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.{1} = LuaScriptMgr.GetColor(L, 3);\r\n", o, name);
 			} else if (t == typeof(Ray)) {
-                sb.AppendFormat(INDENT_3 + "{0}.{1} = LuaScriptMgr.GetRay(L, 3);\r\n", o, name);
+                sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.{1} = LuaScriptMgr.GetRay(L, 3);\r\n", o, name);
 			} else if (t == typeof(Bounds)) {
-                sb.AppendFormat(INDENT_3 + "{0}.{1} = LuaScriptMgr.GetBounds(L, 3);\r\n", o, name);
+                sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.{1} = LuaScriptMgr.GetBounds(L, 3);\r\n", o, name);
 			} else if (t == typeof(LuaStringBuffer)) {
-                sb.AppendFormat(INDENT_3 + "{0}.{1} = LuaScriptMgr.GetStringBuffer(L, 3);\r\n", o, name);
+                sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.{1} = LuaScriptMgr.GetStringBuffer(L, 3);\r\n", o, name);
 			} else if (typeof(UnityEngine.TrackedReference).IsAssignableFrom (t)) {
-                sb.AppendFormat(INDENT_3 + "{0}.{1} = ({2})LuaScriptMgr.GetTrackedObject(L, 3, typeof(2));\r\n", o, name, GetTypeStr(t));
+                sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.{1} = ({2})LuaScriptMgr.GetTrackedObject(L, 3, typeof(2));\r\n", o, name, GetTypeStr(t));
 			} else if (typeof(UnityEngine.Object).IsAssignableFrom (t)) {
-                sb.AppendFormat(INDENT_3 + "{0}.{1} = ({2})LuaScriptMgr.GetUnityObject(L, 3, typeof({2}));\r\n", o, name, GetTypeStr(t));
+                sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.{1} = ({2})LuaScriptMgr.GetUnityObject(L, 3, typeof({2}));\r\n", o, name, GetTypeStr(t));
 			} else if (typeof(System.Delegate).IsAssignableFrom (t)) {
-                sb.AppendLine(INDENT_3 + "LuaTypes funcType = LuaDLL.lua_type(L, 3);\r\n");
-                sb.AppendLine(INDENT_3 + "if (funcType != LuaTypes.LUA_TFUNCTION)");
-                sb.AppendLine(INDENT_3 + "{");
-                sb.AppendFormat(INDENT_4 + "{0}.{1} = ({2})LuaScriptMgr.GetNetObject(L, 3, typeof({2}));\r\n", o, name, GetTypeStr(t));
-                sb.AppendLine(INDENT_3 + "}\r\n" + INDENT_2 + "else");
-                sb.AppendLine(INDENT_3 + "{");
-                sb.AppendLine(INDENT_4 + "LuaFunction func = LuaScriptMgr.ToLuaFunction(L, 3);");
-                sb.AppendFormat(INDENT_4 + "{0}.{1} = ", o, name);
-				GenDelegateBody (t, INDENT_4, true);
-                sb.AppendLine(INDENT_3 + "}");
+                sb.AppendLine(GlobalConst.INDENT_3 + "LuaTypes funcType = LuaDLL.lua_type(L, 3);\r\n");
+                sb.AppendLine(GlobalConst.INDENT_3 + "if (funcType != LuaTypes.LUA_TFUNCTION)");
+                sb.AppendLine(GlobalConst.INDENT_3 + "{");
+                sb.AppendFormat(GlobalConst.INDENT_4 + "{0}.{1} = ({2})LuaScriptMgr.GetNetObject(L, 3, typeof({2}));\r\n", o, name, GetTypeStr(t));
+                sb.AppendLine(GlobalConst.INDENT_3 + "}\r\n" + GlobalConst.INDENT_2 + "else");
+                sb.AppendLine(GlobalConst.INDENT_3 + "{");
+                sb.AppendLine(GlobalConst.INDENT_4 + "LuaFunction func = LuaScriptMgr.ToLuaFunction(L, 3);");
+                sb.AppendFormat(GlobalConst.INDENT_4 + "{0}.{1} = ", o, name);
+				GenDelegateBody (t, GlobalConst.INDENT_4, true);
+                sb.AppendLine(GlobalConst.INDENT_3 + "}");
 			} else if (typeof(object).IsAssignableFrom (t) || t.IsEnum) {
-                sb.AppendFormat(INDENT_3 + "{0}.{1} = ({2})LuaScriptMgr.GetNetObject(L, 3, typeof({2}));\r\n", o, name, GetTypeStr(t));
+                sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.{1} = ({2})LuaScriptMgr.GetNetObject(L, 3, typeof({2}));\r\n", o, name, GetTypeStr(t));
 			} else if (t == typeof(Type)) {
-                sb.AppendFormat(INDENT_3 + "{0}.{1} = LuaScriptMgr.GetTypeObject(L, 3);\r\n", o, name);
+                sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.{1} = LuaScriptMgr.GetTypeObject(L, 3);\r\n", o, name);
 			} else {
 				LogManager.E ("not defined Type {0}", t.ToString ());
 			}
@@ -2018,22 +2011,22 @@ namespace Lshain
 			if (index < 0 || IsStatic)
 				return;
 
-            sb.AppendLine("\r\n" + INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
-            sb.AppendLine(INDENT_2 + "static int Lua_ToString(IntPtr L)");
-            sb.AppendLine(INDENT_2 + "{");
-            sb.AppendLine(INDENT_3 + "object obj = LuaScriptMgr.GetLuaObject(L, 1);\r\n");
+            sb.AppendLine("\r\n" + GlobalConst.INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
+            sb.AppendLine(GlobalConst.INDENT_2 + "static int Lua_ToString(IntPtr L)");
+            sb.AppendLine(GlobalConst.INDENT_2 + "{");
+            sb.AppendLine(GlobalConst.INDENT_3 + "object obj = LuaScriptMgr.GetLuaObject(L, 1);\r\n");
 
-            sb.AppendLine(INDENT_3 + "if (obj != null)");
-            sb.AppendLine(INDENT_3 + "{");
-            sb.AppendLine(INDENT_4 + "LuaScriptMgr.Push(L, obj.ToString());");
-            sb.AppendLine(INDENT_3 + "}");
-            sb.AppendLine(INDENT_3 + "else");
-            sb.AppendLine(INDENT_3 + "{");
-            sb.AppendFormat(INDENT_4 + "LuaScriptMgr.Push(L, \"Table: {0}\");\r\n", LuaTableName);
-            sb.AppendLine(INDENT_3 + "}");
+            sb.AppendLine(GlobalConst.INDENT_3 + "if (obj != null)");
+            sb.AppendLine(GlobalConst.INDENT_3 + "{");
+            sb.AppendLine(GlobalConst.INDENT_4 + "LuaScriptMgr.Push(L, obj.ToString());");
+            sb.AppendLine(GlobalConst.INDENT_3 + "}");
+            sb.AppendLine(GlobalConst.INDENT_3 + "else");
+            sb.AppendLine(GlobalConst.INDENT_3 + "{");
+            sb.AppendFormat(GlobalConst.INDENT_4 + "LuaScriptMgr.Push(L, \"Table: {0}\");\r\n", LuaTableName);
+            sb.AppendLine(GlobalConst.INDENT_3 + "}");
 			sb.AppendLine ();
-            sb.AppendLine(INDENT_3 + "return 1;");
-            sb.AppendLine(INDENT_2 + "}");
+            sb.AppendLine(GlobalConst.INDENT_3 + "return 1;");
+            sb.AppendLine(GlobalConst.INDENT_2 + "}");
 		}
 
 		static bool IsNeedOp (string name)
@@ -2146,30 +2139,30 @@ namespace Lshain
 			}
 
 			fields = list.ToArray ();
-            sb.AppendFormat(INDENT_1 + "public class {0}Wrap\r\n", WrapFileName);
-            sb.AppendLine(INDENT_1 + "{");
-            sb.AppendLine(INDENT_2 + "static LuaMethod[] enums = new LuaMethod[]");
-            sb.AppendLine(INDENT_2 + "{");
+            sb.AppendFormat(GlobalConst.INDENT_1 + "public class {0}Wrap\r\n", WrapFileName);
+            sb.AppendLine(GlobalConst.INDENT_1 + "{");
+            sb.AppendLine(GlobalConst.INDENT_2 + "static LuaMethod[] enums = new LuaMethod[]");
+            sb.AppendLine(GlobalConst.INDENT_2 + "{");
 
 			for (int i = 0; i < fields.Length; i++) {
-                sb.AppendFormat(INDENT_3 + "new LuaMethod(\"{0}\", Get{0}),\r\n", fields[i].Name);
+                sb.AppendFormat(GlobalConst.INDENT_3 + "new LuaMethod(\"{0}\", Get{0}),\r\n", fields[i].Name);
 			}
 
-            sb.AppendFormat(INDENT_3 + "new LuaMethod(\"IntToEnum\", IntToEnum),\r\n");
-            sb.AppendLine(INDENT_2 + "};\r\n");
+            sb.AppendFormat(GlobalConst.INDENT_3 + "new LuaMethod(\"IntToEnum\", IntToEnum),\r\n");
+            sb.AppendLine(GlobalConst.INDENT_2 + "};\r\n");
 
-            sb.AppendLine(INDENT_2 + "public static void Register(IntPtr L)");
-            sb.AppendLine(INDENT_2 + "{");
-            sb.AppendFormat(INDENT_3 + "LuaScriptMgr.RegisterLib(L, \"{0}\", typeof({0}), enums);\r\n", LuaTableName);
-            sb.AppendLine(INDENT_2 + "}");        
+            sb.AppendLine(GlobalConst.INDENT_2 + "public static void Register(IntPtr L)");
+            sb.AppendLine(GlobalConst.INDENT_2 + "{");
+            sb.AppendFormat(GlobalConst.INDENT_3 + "LuaScriptMgr.RegisterLuaTable(L, \"{0}\", typeof({0}), enums);\r\n", LuaTableName);
+            sb.AppendLine(GlobalConst.INDENT_2 + "}");        
 
 			for (int i = 0; i < fields.Length; i++) {
-                sb.AppendLine("\r\n" + INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
-                sb.AppendFormat(INDENT_2 + "static int Get{0}(IntPtr L)\r\n", fields[i].Name);
-                sb.AppendLine(INDENT_2 + "{");
-                sb.AppendFormat(INDENT_3 + "LuaScriptMgr.Push(L, {0}.{1});\r\n", Name, fields[i].Name);
-                sb.AppendLine(INDENT_3 + "return 1;");
-                sb.AppendLine(INDENT_2 + "}");            
+                sb.AppendLine("\r\n" + GlobalConst.INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
+                sb.AppendFormat(GlobalConst.INDENT_2 + "static int Get{0}(IntPtr L)\r\n", fields[i].Name);
+                sb.AppendLine(GlobalConst.INDENT_2 + "{");
+                sb.AppendFormat(GlobalConst.INDENT_3 + "LuaScriptMgr.Push(L, {0}.{1});\r\n", Name, fields[i].Name);
+                sb.AppendLine(GlobalConst.INDENT_3 + "return 1;");
+                sb.AppendLine(GlobalConst.INDENT_2 + "}");            
 			}
 
 		    sb.AppendLine();
@@ -2177,14 +2170,14 @@ namespace Lshain
 
 		static void GenEnumTranslator ()
 		{
-            sb.AppendLine(INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
-            sb.AppendLine(INDENT_2 + "static int IntToEnum(IntPtr L)");
-            sb.AppendLine(INDENT_2 + "{");
-            sb.AppendLine(INDENT_3 + "int arg0 = (int)LuaDLL.lua_tonumber(L, 1);");
-            sb.AppendFormat(INDENT_3 + "{0} o = ({0})arg0;\r\n", Name);
-            sb.AppendLine(INDENT_3 + "LuaScriptMgr.Push(L, o);");
-            sb.AppendLine(INDENT_3 + "return 1;");
-            sb.AppendLine(INDENT_2 + "}");        
+            sb.AppendLine(GlobalConst.INDENT_2 + "[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]");
+            sb.AppendLine(GlobalConst.INDENT_2 + "static int IntToEnum(IntPtr L)");
+            sb.AppendLine(GlobalConst.INDENT_2 + "{");
+            sb.AppendLine(GlobalConst.INDENT_3 + "int arg0 = (int)LuaDLL.lua_tonumber(L, 1);");
+            sb.AppendFormat(GlobalConst.INDENT_3 + "{0} o = ({0})arg0;\r\n", Name);
+            sb.AppendLine(GlobalConst.INDENT_3 + "LuaScriptMgr.Push(L, o);");
+            sb.AppendLine(GlobalConst.INDENT_3 + "return 1;");
+            sb.AppendLine(GlobalConst.INDENT_2 + "}");        
 		}
 
 		public static void GenDelegates (DelegateType[] list)
@@ -2221,56 +2214,56 @@ namespace Lshain
 				//}            
 			}
 
-			sb.AppendLine ("namespace Lshain");
+			sb.AppendLine ("namespace LT");
 			sb.AppendLine ("{");
-            sb.AppendLine(INDENT_1 + "public static class DelegateFactory");
-            sb.AppendLine(INDENT_1 + "{");
-            sb.AppendLine(INDENT_2 + "delegate Delegate DelegateValue(LuaFunction func);");
-            sb.AppendLine(INDENT_2 + "static Dictionary<Type, DelegateValue> dict = new Dictionary<Type, DelegateValue>();");        
+            sb.AppendLine(GlobalConst.INDENT_1 + "public static class DelegateFactory");
+            sb.AppendLine(GlobalConst.INDENT_1 + "{");
+            sb.AppendLine(GlobalConst.INDENT_2 + "delegate Delegate DelegateValue(LuaFunction func);");
+            sb.AppendLine(GlobalConst.INDENT_2 + "static Dictionary<Type, DelegateValue> dict = new Dictionary<Type, DelegateValue>();");        
 
 			sb.AppendLine ();
-            sb.AppendLine(INDENT_2 + "[NoToLuaAttribute]");
-            sb.AppendLine(INDENT_2 + "public static void Register(IntPtr L)");
-            sb.AppendLine(INDENT_2 + "{");
+            sb.AppendLine(GlobalConst.INDENT_2 + "[NoToLuaAttribute]");
+            sb.AppendLine(GlobalConst.INDENT_2 + "public static void Register(IntPtr L)");
+            sb.AppendLine(GlobalConst.INDENT_2 + "{");
 
 			for (int i = 0; i < list.Length; i++) {            
 				string Type = list [i].strType;
 				string name = list [i].name;
-                sb.AppendFormat(INDENT_3 + "dict.Add(typeof({0}), new DelegateValue({1}));\r\n", Type, name);
+                sb.AppendFormat(GlobalConst.INDENT_3 + "dict.Add(typeof({0}), new DelegateValue({1}));\r\n", Type, name);
 			}
 
-            sb.AppendLine(INDENT_2 + "}\r\n");
+            sb.AppendLine(GlobalConst.INDENT_2 + "}\r\n");
 
-            sb.AppendLine(INDENT_2 + "[NoToLuaAttribute]");
-            sb.AppendLine(INDENT_2 + "public static Delegate CreateDelegate(Type t, LuaFunction func)");
-            sb.AppendLine(INDENT_2 + "{");
-            sb.AppendLine(INDENT_3 + "DelegateValue create = null;\r\n");
-            sb.AppendLine(INDENT_3 + "if (!dict.TryGetValue(t, out create))");
-            sb.AppendLine(INDENT_3 + "{");
-            sb.AppendLine(INDENT_4 + "LogManager.E(\"Delegate {0} not register\", t.FullName);");
-            sb.AppendLine(INDENT_4 + "return null;");
-            sb.AppendLine(INDENT_3 + "}");
-            sb.AppendLine(INDENT_3 + "return create(func);");
-            sb.AppendLine(INDENT_2 + "}");
+            sb.AppendLine(GlobalConst.INDENT_2 + "[NoToLuaAttribute]");
+            sb.AppendLine(GlobalConst.INDENT_2 + "public static Delegate CreateDelegate(Type t, LuaFunction func)");
+            sb.AppendLine(GlobalConst.INDENT_2 + "{");
+            sb.AppendLine(GlobalConst.INDENT_3 + "DelegateValue create = null;\r\n");
+            sb.AppendLine(GlobalConst.INDENT_3 + "if (!dict.TryGetValue(t, out create))");
+            sb.AppendLine(GlobalConst.INDENT_3 + "{");
+            sb.AppendLine(GlobalConst.INDENT_4 + "LogManager.E(\"Delegate {0} not register\", t.FullName);");
+            sb.AppendLine(GlobalConst.INDENT_4 + "return null;");
+            sb.AppendLine(GlobalConst.INDENT_3 + "}");
+            sb.AppendLine(GlobalConst.INDENT_3 + "return create(func);");
+            sb.AppendLine(GlobalConst.INDENT_2 + "}");
 
 			for (int i = 0; i < list.Length; i++) {
 				Type t = list [i].Type;                       
 				string Type = list [i].strType;
 				string name = list [i].name;
 
-                sb.AppendFormat("\r\n" + INDENT_2 + "public static Delegate {0}(LuaFunction func)\r\n", name);
-                sb.AppendLine(INDENT_2 + "{");
+                sb.AppendFormat("\r\n" + GlobalConst.INDENT_2 + "public static Delegate {0}(LuaFunction func)\r\n", name);
+                sb.AppendLine(GlobalConst.INDENT_2 + "{");
 
-                sb.AppendFormat(INDENT_3 + "{0} d = ", Type);
-				GenDelegateBody (t, INDENT_3, false);
-                sb.AppendLine(INDENT_3 + "return d;");
+                sb.AppendFormat(GlobalConst.INDENT_3 + "{0} d = ", Type);
+				GenDelegateBody (t, GlobalConst.INDENT_3, false);
+                sb.AppendLine(GlobalConst.INDENT_3 + "return d;");
 
-                sb.AppendLine(INDENT_2 + "}");
+                sb.AppendLine(GlobalConst.INDENT_2 + "}");
 			}
 
-            sb.AppendLine(INDENT_1 + "}");      
+            sb.AppendLine(GlobalConst.INDENT_1 + "}");      
 			sb.AppendLine ("}");
-            SaveFile(LuaEngineTools.LUA_DELEGATE_FACTORY_FILE);
+            SaveFile(GlobalConst.LUA_DELEGATE_FACTORY_FILE);
 
 			Clear ();
 		}

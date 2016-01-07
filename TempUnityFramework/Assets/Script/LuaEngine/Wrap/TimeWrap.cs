@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Lshain
+namespace LT
 {
 	public class TimeWrap
 	{
@@ -31,7 +31,7 @@ namespace Lshain
 				new LuaField("captureFramerate", get_captureFramerate, set_captureFramerate),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.Time", typeof(Time), regs, fields, typeof(object));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.Time", typeof(Time), regs, fields, typeof(object));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

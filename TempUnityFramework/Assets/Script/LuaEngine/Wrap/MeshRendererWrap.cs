@@ -2,7 +2,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class MeshRendererWrap
 	{
@@ -20,7 +20,7 @@ namespace Lshain
 				new LuaField("additionalVertexStreams", get_additionalVertexStreams, set_additionalVertexStreams),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.MeshRenderer", typeof(MeshRenderer), regs, fields, typeof(Renderer));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.MeshRenderer", typeof(MeshRenderer), regs, fields, typeof(Renderer));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

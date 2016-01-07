@@ -2,7 +2,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class BoxColliderWrap
 	{
@@ -21,7 +21,7 @@ namespace Lshain
 				new LuaField("size", get_size, set_size),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.BoxCollider", typeof(BoxCollider), regs, fields, typeof(Collider));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.BoxCollider", typeof(BoxCollider), regs, fields, typeof(Collider));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

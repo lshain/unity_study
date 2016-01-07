@@ -2,7 +2,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class ParticleEmitterWrap
 	{
@@ -40,7 +40,7 @@ namespace Lshain
 				new LuaField("enabled", get_enabled, set_enabled),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.ParticleEmitter", typeof(ParticleEmitter), regs, fields, typeof(Component));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.ParticleEmitter", typeof(ParticleEmitter), regs, fields, typeof(Component));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Lshain
+namespace LT
 {
 	public class TrackedReferenceWrap
 	{
@@ -20,7 +20,7 @@ namespace Lshain
 			{
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.TrackedReference", typeof(TrackedReference), regs, fields, typeof(object));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.TrackedReference", typeof(TrackedReference), regs, fields, typeof(object));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

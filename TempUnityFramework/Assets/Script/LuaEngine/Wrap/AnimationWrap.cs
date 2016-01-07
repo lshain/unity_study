@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class AnimationWrap
 	{
@@ -43,7 +43,7 @@ namespace Lshain
 				new LuaField("localBounds", get_localBounds, set_localBounds),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.Animation", typeof(Animation), regs, fields, typeof(Behaviour));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.Animation", typeof(Animation), regs, fields, typeof(Behaviour));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

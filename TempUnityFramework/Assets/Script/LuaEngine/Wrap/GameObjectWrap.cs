@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class GameObjectWrap
 	{
@@ -45,7 +45,7 @@ namespace Lshain
 				new LuaField("gameObject", get_gameObject, null),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.GameObject", typeof(GameObject), regs, fields, typeof(Object));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.GameObject", typeof(GameObject), regs, fields, typeof(Object));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

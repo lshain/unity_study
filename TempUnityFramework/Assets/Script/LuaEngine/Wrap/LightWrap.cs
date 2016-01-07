@@ -2,7 +2,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class LightWrap
 	{
@@ -43,7 +43,7 @@ namespace Lshain
 				new LuaField("commandBufferCount", get_commandBufferCount, null),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.Light", typeof(Light), regs, fields, typeof(Behaviour));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.Light", typeof(Light), regs, fields, typeof(Behaviour));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

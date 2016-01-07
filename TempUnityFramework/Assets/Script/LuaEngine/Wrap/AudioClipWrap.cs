@@ -2,7 +2,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class AudioClipWrap
 	{
@@ -32,7 +32,7 @@ namespace Lshain
 				new LuaField("loadInBackground", get_loadInBackground, null),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.AudioClip", typeof(AudioClip), regs, fields, typeof(Object));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.AudioClip", typeof(AudioClip), regs, fields, typeof(Object));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

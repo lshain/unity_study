@@ -7,7 +7,7 @@ using System.Threading;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Lshain
+namespace LT
 {
 	#if NO_LOCK
 	//完全多线程安全的，但IOS AOT编译不过

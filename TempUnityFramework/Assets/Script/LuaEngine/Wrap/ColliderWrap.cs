@@ -2,7 +2,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class ColliderWrap
 	{
@@ -28,7 +28,7 @@ namespace Lshain
 				new LuaField("bounds", get_bounds, null),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.Collider", typeof(Collider), regs, fields, typeof(Component));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.Collider", typeof(Collider), regs, fields, typeof(Component));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

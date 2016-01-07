@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class MonoBehaviourWrap
 	{
@@ -30,7 +30,7 @@ namespace Lshain
 				new LuaField("useGUILayout", get_useGUILayout, set_useGUILayout),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.MonoBehaviour", typeof(MonoBehaviour), regs, fields, typeof(Behaviour));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.MonoBehaviour", typeof(MonoBehaviour), regs, fields, typeof(Behaviour));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

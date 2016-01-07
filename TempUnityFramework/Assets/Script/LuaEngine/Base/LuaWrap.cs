@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace Lshain
+namespace LT
 {
 	public struct LuaMethod
 	{

@@ -2,7 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 
-namespace Lshain
+namespace LT
 {
 	public static class DelegateFactory
 	{

@@ -2,7 +2,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class ObjectWrap
 	{
@@ -33,7 +33,7 @@ namespace Lshain
 				new LuaField("hideFlags", get_hideFlags, set_hideFlags),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.Object", typeof(Object), regs, fields, typeof(object));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.Object", typeof(Object), regs, fields, typeof(object));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

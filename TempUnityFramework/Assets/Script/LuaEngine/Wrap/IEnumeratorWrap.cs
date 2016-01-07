@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace Lshain
+namespace LT
 {
 	public class IEnumeratorWrap
 	{
@@ -20,7 +20,7 @@ namespace Lshain
 				new LuaField("Current", get_Current, null),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "System.Collections.IEnumerator", typeof(IEnumerator), regs, fields, null);
+			LuaScriptMgr.RegisterLuaTable(L, "System.Collections.IEnumerator", typeof(IEnumerator), regs, fields, null);
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

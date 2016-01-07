@@ -2,7 +2,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class SphereColliderWrap
 	{
@@ -21,7 +21,7 @@ namespace Lshain
 				new LuaField("radius", get_radius, set_radius),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.SphereCollider", typeof(SphereCollider), regs, fields, typeof(Collider));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.SphereCollider", typeof(SphereCollider), regs, fields, typeof(Collider));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

@@ -2,7 +2,7 @@ using System;
 using System.Globalization;
 using System.Reflection;
 
-namespace Lshain
+namespace LT
 {
     /// <summary>
     /// Summary description for ProxyType.

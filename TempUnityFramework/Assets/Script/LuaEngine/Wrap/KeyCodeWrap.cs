@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Lshain
+namespace LT
 {
 	public class KeyCodeWrap
 	{
@@ -333,7 +333,7 @@ namespace Lshain
 
 		public static void Register(IntPtr L)
 		{
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.KeyCode", typeof(UnityEngine.KeyCode), enums);
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.KeyCode", typeof(UnityEngine.KeyCode), enums);
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

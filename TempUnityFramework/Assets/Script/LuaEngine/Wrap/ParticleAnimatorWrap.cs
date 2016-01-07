@@ -2,7 +2,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class ParticleAnimatorWrap
 	{
@@ -28,7 +28,7 @@ namespace Lshain
 				new LuaField("colorAnimation", get_colorAnimation, set_colorAnimation),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.ParticleAnimator", typeof(ParticleAnimator), regs, fields, typeof(Component));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.ParticleAnimator", typeof(ParticleAnimator), regs, fields, typeof(Component));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

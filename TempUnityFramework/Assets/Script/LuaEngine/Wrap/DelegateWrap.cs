@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lshain
+namespace LT
 {
 	public class DelegateWrap
 	{
@@ -29,7 +29,7 @@ namespace Lshain
 				new LuaField("Target", get_Target, null),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "System.Delegate", typeof(Delegate), regs, fields, typeof(object));
+			LuaScriptMgr.RegisterLuaTable(L, "System.Delegate", typeof(Delegate), regs, fields, typeof(object));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

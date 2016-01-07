@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Lshain
+namespace LT
 {
 	public class LightTypeWrap
 	{
@@ -16,7 +16,7 @@ namespace Lshain
 
 		public static void Register(IntPtr L)
 		{
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.LightType", typeof(UnityEngine.LightType), enums);
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.LightType", typeof(UnityEngine.LightType), enums);
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

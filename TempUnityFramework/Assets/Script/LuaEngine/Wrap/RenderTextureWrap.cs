@@ -2,7 +2,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class RenderTextureWrap
 	{
@@ -45,7 +45,7 @@ namespace Lshain
 				new LuaField("active", get_active, set_active),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.RenderTexture", typeof(RenderTexture), regs, fields, typeof(Texture));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.RenderTexture", typeof(RenderTexture), regs, fields, typeof(Texture));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

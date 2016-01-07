@@ -2,7 +2,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class MeshColliderWrap
 	{
@@ -21,7 +21,7 @@ namespace Lshain
 				new LuaField("convex", get_convex, set_convex),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.MeshCollider", typeof(MeshCollider), regs, fields, typeof(Collider));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.MeshCollider", typeof(MeshCollider), regs, fields, typeof(Collider));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

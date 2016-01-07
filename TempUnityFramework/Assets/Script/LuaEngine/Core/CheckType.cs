@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using UnityEngine;
 
-namespace Lshain
+namespace LT
 {
     /*
      * Type checking and conversion functions.

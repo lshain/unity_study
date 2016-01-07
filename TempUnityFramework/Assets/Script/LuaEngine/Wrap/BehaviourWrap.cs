@@ -2,7 +2,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class BehaviourWrap
 	{
@@ -21,7 +21,7 @@ namespace Lshain
 				new LuaField("isActiveAndEnabled", get_isActiveAndEnabled, null),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.Behaviour", typeof(Behaviour), regs, fields, typeof(Component));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.Behaviour", typeof(Behaviour), regs, fields, typeof(Component));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

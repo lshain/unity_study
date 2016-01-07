@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lshain
+namespace LT
 {
 	public class System_ObjectWrap
 	{
@@ -22,7 +22,7 @@ namespace Lshain
 			{
 			};
 
-			LuaScriptMgr.RegisterLib(L, "System.Object", typeof(object), regs, fields, null);
+			LuaScriptMgr.RegisterLuaTable(L, "System.Object", typeof(object), regs, fields, null);
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

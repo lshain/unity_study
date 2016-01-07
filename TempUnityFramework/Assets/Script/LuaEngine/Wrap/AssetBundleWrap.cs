@@ -2,7 +2,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class AssetBundleWrap
 	{
@@ -34,7 +34,7 @@ namespace Lshain
 				new LuaField("mainAsset", get_mainAsset, null),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.AssetBundle", typeof(AssetBundle), regs, fields, typeof(Object));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.AssetBundle", typeof(AssetBundle), regs, fields, typeof(Object));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

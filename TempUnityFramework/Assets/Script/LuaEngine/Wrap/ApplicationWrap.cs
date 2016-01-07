@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Lshain
+namespace LT
 {
 	public class ApplicationWrap
 	{
@@ -59,7 +59,7 @@ namespace Lshain
 				new LuaField("isShowingSplashScreen", get_isShowingSplashScreen, null),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.Application", typeof(Application), regs, fields, typeof(object));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.Application", typeof(Application), regs, fields, typeof(object));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

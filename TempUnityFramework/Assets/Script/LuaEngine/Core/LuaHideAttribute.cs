@@ -1,6 +1,6 @@
 using System;
 
-namespace Lshain
+namespace LT
 {
     /// <summary>
     /// Marks a method, field or property to be hidden from Lua auto-completion

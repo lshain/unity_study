@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
 
-namespace Lshain
+namespace LT
 {
     /*
      * Structure to store a Type and the return types of

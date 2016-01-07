@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Lshain
+namespace LT
 {
 	public class BlendWeightsWrap
 	{
@@ -15,7 +15,7 @@ namespace Lshain
 
 		public static void Register(IntPtr L)
 		{
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.BlendWeights", typeof(UnityEngine.BlendWeights), enums);
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.BlendWeights", typeof(UnityEngine.BlendWeights), enums);
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

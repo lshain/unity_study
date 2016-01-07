@@ -1,6 +1,6 @@
 using System;
 
-namespace Lshain
+namespace LT
 {
     /// <summary>
     /// Marks a method for global usage in Lua scripts

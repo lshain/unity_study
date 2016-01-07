@@ -2,7 +2,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class QualitySettingsWrap
 	{
@@ -47,7 +47,7 @@ namespace Lshain
 				new LuaField("asyncUploadBufferSize", get_asyncUploadBufferSize, set_asyncUploadBufferSize),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.QualitySettings", typeof(QualitySettings), regs, fields, typeof(Object));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.QualitySettings", typeof(QualitySettings), regs, fields, typeof(Object));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

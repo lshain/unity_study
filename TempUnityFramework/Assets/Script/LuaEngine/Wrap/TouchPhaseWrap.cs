@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Lshain
+namespace LT
 {
 	public class TouchPhaseWrap
 	{
@@ -17,7 +17,7 @@ namespace Lshain
 
 		public static void Register(IntPtr L)
 		{
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.TouchPhase", typeof(UnityEngine.TouchPhase), enums);
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.TouchPhase", typeof(UnityEngine.TouchPhase), enums);
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

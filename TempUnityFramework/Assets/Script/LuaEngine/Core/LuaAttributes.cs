@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lshain
+namespace LT
 {
     public class NoToLuaAttribute : System.Attribute
     {

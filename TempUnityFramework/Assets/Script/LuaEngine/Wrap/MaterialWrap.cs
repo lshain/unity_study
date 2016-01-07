@@ -2,7 +2,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class MaterialWrap
 	{
@@ -54,7 +54,7 @@ namespace Lshain
 				new LuaField("globalIlluminationFlags", get_globalIlluminationFlags, set_globalIlluminationFlags),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.Material", typeof(Material), regs, fields, typeof(Object));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.Material", typeof(Material), regs, fields, typeof(Object));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

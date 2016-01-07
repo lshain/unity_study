@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
 
-namespace Lshain
+namespace LT
 {
 	//忘了原来的设计了，还是用系统的吧
 	public class LuaObjectMap

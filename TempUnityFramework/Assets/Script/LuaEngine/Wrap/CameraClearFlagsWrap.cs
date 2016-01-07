@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Lshain
+namespace LT
 {
 	public class CameraClearFlagsWrap
 	{
@@ -17,7 +17,7 @@ namespace Lshain
 
 		public static void Register(IntPtr L)
 		{
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.CameraClearFlags", typeof(UnityEngine.CameraClearFlags), enums);
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.CameraClearFlags", typeof(UnityEngine.CameraClearFlags), enums);
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

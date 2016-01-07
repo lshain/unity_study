@@ -2,7 +2,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class CharacterControllerWrap
 	{
@@ -31,7 +31,7 @@ namespace Lshain
 				new LuaField("detectCollisions", get_detectCollisions, set_detectCollisions),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.CharacterController", typeof(CharacterController), regs, fields, typeof(Collider));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.CharacterController", typeof(CharacterController), regs, fields, typeof(Collider));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

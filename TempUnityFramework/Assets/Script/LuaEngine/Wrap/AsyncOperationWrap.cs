@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Lshain
+namespace LT
 {
 	public class AsyncOperationWrap
 	{
@@ -21,7 +21,7 @@ namespace Lshain
 				new LuaField("allowSceneActivation", get_allowSceneActivation, set_allowSceneActivation),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.AsyncOperation", typeof(AsyncOperation), regs, fields, typeof(System.Object));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.AsyncOperation", typeof(AsyncOperation), regs, fields, typeof(System.Object));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

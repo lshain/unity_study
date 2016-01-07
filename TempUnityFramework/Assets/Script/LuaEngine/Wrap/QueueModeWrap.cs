@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Lshain
+namespace LT
 {
 	public class QueueModeWrap
 	{
@@ -14,7 +14,7 @@ namespace Lshain
 
 		public static void Register(IntPtr L)
 		{
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.QueueMode", typeof(UnityEngine.QueueMode), enums);
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.QueueMode", typeof(UnityEngine.QueueMode), enums);
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

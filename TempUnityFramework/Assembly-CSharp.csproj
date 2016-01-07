@@ -38,20 +38,18 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="UnityEngine">
-      <HintPath>D:/Program Files/Unity5/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
+      <HintPath>D:/Unity5/Unity/Editor/Data/Managed/UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor">
-      <HintPath>D:/Program Files/Unity5/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
+      <HintPath>D:/Unity5/Unity/Editor/Data/Managed/UnityEditor.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Script\Common\GlobalConst.cs" />
      <Compile Include="Assets\Script\Common\LogManager.cs" />
-     <Compile Include="Assets\Script\EngineInit.cs" />
      <Compile Include="Assets\Script\LuaEngine\Base\DelegateFactory.cs" />
      <Compile Include="Assets\Script\LuaEngine\Base\LockFreeQueue.cs" />
      <Compile Include="Assets\Script\LuaEngine\Base\LuaBinder.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Base\LuaEngineClient.cs" />
      <Compile Include="Assets\Script\LuaEngine\Base\LuaScriptMgr.cs" />
      <Compile Include="Assets\Script\LuaEngine\Base\LuaWrap.cs" />
      <Compile Include="Assets\Script\LuaEngine\Core\CheckType.cs" />
@@ -73,6 +71,7 @@
      <Compile Include="Assets\Script\LuaEngine\Core\MethodWrapper.cs" />
      <Compile Include="Assets\Script\LuaEngine\Core\ObjectTranslator.cs" />
      <Compile Include="Assets\Script\LuaEngine\Core\ProxyType.cs" />
+     <Compile Include="Assets\Script\LuaEngine\EngineInit.cs" />
      <Compile Include="Assets\Script\LuaEngine\Wrap\AnimationBlendModeWrap.cs" />
      <Compile Include="Assets\Script\LuaEngine\Wrap\AnimationClipWrap.cs" />
      <Compile Include="Assets\Script\LuaEngine\Wrap\AnimationStateWrap.cs" />
@@ -96,9 +95,9 @@
      <Compile Include="Assets\Script\LuaEngine\Wrap\IEnumeratorWrap.cs" />
      <Compile Include="Assets\Script\LuaEngine\Wrap\InputWrap.cs" />
      <Compile Include="Assets\Script\LuaEngine\Wrap\KeyCodeWrap.cs" />
+     <Compile Include="Assets\Script\LuaEngine\Wrap\LT_LogManagerWrap.cs" />
      <Compile Include="Assets\Script\LuaEngine\Wrap\LightTypeWrap.cs" />
      <Compile Include="Assets\Script\LuaEngine\Wrap\LightWrap.cs" />
-     <Compile Include="Assets\Script\LuaEngine\Wrap\Lshain_LogManagerWrap.cs" />
      <Compile Include="Assets\Script\LuaEngine\Wrap\MaterialWrap.cs" />
      <Compile Include="Assets\Script\LuaEngine\Wrap\MeshColliderWrap.cs" />
      <Compile Include="Assets\Script\LuaEngine\Wrap\MeshRendererWrap.cs" />
@@ -127,39 +126,37 @@
      <Compile Include="Assets\Script\LuaEngine\Wrap\TrackedReferenceWrap.cs" />
      <Compile Include="Assets\Script\LuaEngine\Wrap\TransformWrap.cs" />
      <Compile Include="Assets\Script\LuaEngine\Wrap\TypeWrap.cs" />
+     <Compile Include="Assets\Script\LuaEngine\Wrap\UnityEngine_Rendering_ShadowCastingModeWrap.cs" />
      <Compile Include="Assets\Script\LuaEngine\Wrap\stringWrap.cs" />
-     <Compile Include="Assets\uLua\Example\01_HelloWorld\HelloWorld.cs" />
-     <Compile Include="Assets\uLua\Example\02_CreateGameObject\CreateGameObject01.cs" />
-     <Compile Include="Assets\uLua\Example\02_CreateGameObject\CreateGameObject02.cs" />
-     <Compile Include="Assets\uLua\Example\03_AccessingLuaVariables\AccessingLuaVariables01.cs" />
-     <Compile Include="Assets\uLua\Example\03_AccessingLuaVariables\AccessingLuaVariables02.cs" />
-     <Compile Include="Assets\uLua\Example\04_ScriptsFromFile\ScriptsFromFile_01.cs" />
-     <Compile Include="Assets\uLua\Example\04_ScriptsFromFile\ScriptsFromFile_02.cs" />
-     <Compile Include="Assets\uLua\Example\05_CallLuaFunction\CallLuaFunction_01.cs" />
-     <Compile Include="Assets\uLua\Example\05_CallLuaFunction\CallLuaFunction_02.cs" />
-     <Compile Include="Assets\uLua\Example\06_LuaCoroutines\LuaCoroutines.cs" />
-     <Compile Include="Assets\uLua\Example\07_AccessingArray\TestLuaArray.cs" />
-     <Compile Include="Assets\uLua\Example\08_ProtoBuffer\LuaProtoBuffer01.cs" />
-     <Compile Include="Assets\uLua\Example\08_ProtoBuffer\TestProtol.cs" />
-     <Compile Include="Assets\uLua\Example\08_ProtoBuffer\TestProtolWrap.cs" />
-     <Compile Include="Assets\uLua\Example\09_Delegate\LuaDelegate01.cs" />
-     <Compile Include="Assets\uLua\Example\09_Delegate\TestEventListener.cs" />
-     <Compile Include="Assets\uLua\Example\09_Delegate\TestEventListenerWrap.cs" />
-     <Compile Include="Assets\uLua\Example\10_TestOverride\TestOverride01.cs" />
-     <Compile Include="Assets\uLua\Example\10_TestOverride\TestOverrideWrap.cs" />
-     <Compile Include="Assets\uLua\Example\10_TestOverride\TestOverride_SpaceWrap.cs" />
-     <None Include="Assets\Script\LuaEngine\Lua\readme.txt" />
-     <None Include="Assets\uLua\README.txt" />
+     <Compile Include="Assets\ThirdPlugins\uLua\Example\01_HelloWorld\HelloWorld.cs" />
+     <Compile Include="Assets\ThirdPlugins\uLua\Example\02_CreateGameObject\CreateGameObject01.cs" />
+     <Compile Include="Assets\ThirdPlugins\uLua\Example\02_CreateGameObject\CreateGameObject02.cs" />
+     <Compile Include="Assets\ThirdPlugins\uLua\Example\03_AccessingLuaVariables\AccessingLuaVariables01.cs" />
+     <Compile Include="Assets\ThirdPlugins\uLua\Example\03_AccessingLuaVariables\AccessingLuaVariables02.cs" />
+     <Compile Include="Assets\ThirdPlugins\uLua\Example\04_ScriptsFromFile\ScriptsFromFile_01.cs" />
+     <Compile Include="Assets\ThirdPlugins\uLua\Example\04_ScriptsFromFile\ScriptsFromFile_02.cs" />
+     <Compile Include="Assets\ThirdPlugins\uLua\Example\05_CallLuaFunction\CallLuaFunction_01.cs" />
+     <Compile Include="Assets\ThirdPlugins\uLua\Example\05_CallLuaFunction\CallLuaFunction_02.cs" />
+     <Compile Include="Assets\ThirdPlugins\uLua\Example\06_LuaCoroutines\LuaCoroutines.cs" />
+     <Compile Include="Assets\ThirdPlugins\uLua\Example\07_AccessingArray\TestLuaArray.cs" />
+     <Compile Include="Assets\ThirdPlugins\uLua\Example\08_ProtoBuffer\LuaProtoBuffer01.cs" />
+     <Compile Include="Assets\ThirdPlugins\uLua\Example\08_ProtoBuffer\TestProtol.cs" />
+     <Compile Include="Assets\ThirdPlugins\uLua\Example\08_ProtoBuffer\TestProtolWrap.cs" />
+     <Compile Include="Assets\ThirdPlugins\uLua\Example\09_Delegate\LuaDelegate01.cs" />
+     <Compile Include="Assets\ThirdPlugins\uLua\Example\09_Delegate\TestEventListener.cs" />
+     <Compile Include="Assets\ThirdPlugins\uLua\Example\09_Delegate\TestEventListenerWrap.cs" />
+     <Compile Include="Assets\ThirdPlugins\uLua\Example\10_TestOverride\TestOverride01.cs" />
+     <Compile Include="Assets\ThirdPlugins\uLua\Example\10_TestOverride\TestOverrideWrap.cs" />
+     <Compile Include="Assets\ThirdPlugins\uLua\Example\10_TestOverride\TestOverride_SpaceWrap.cs" />
+     <None Include="Assets\ScriptLua\readme.txt" />
+     <None Include="Assets\ThirdPlugins\uLua\README.txt" />
      <None Include="Assets\ConsolePro\Readme.txt" />
-     <None Include="Assets\uLua\Example\04_ScriptsFromFile\ScriptsFromFile01.lua.txt" />
+     <None Include="Assets\ThirdPlugins\uLua\Example\04_ScriptsFromFile\ScriptsFromFile01.lua.txt" />
  <Reference Include="UnityEngine.UI">
- <HintPath>D:/Program Files/Unity5/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
+ <HintPath>D:/Unity5/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.Networking">
- <HintPath>D:/Program Files/Unity5/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
- </Reference>
- <Reference Include="UnityEditor.iOS.Extensions.Xcode">
- <HintPath>D:/Program Files/Unity5/Unity/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+ <HintPath>D:/Unity5/Unity/Editor/Data/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Lshain
+namespace LT
 {
     public class LuaFunction : LuaBase
     {        

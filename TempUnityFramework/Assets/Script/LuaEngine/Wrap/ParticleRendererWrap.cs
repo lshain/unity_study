@@ -2,7 +2,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class ParticleRendererWrap
 	{
@@ -29,7 +29,7 @@ namespace Lshain
 				new LuaField("uvTiles", get_uvTiles, set_uvTiles),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.ParticleRenderer", typeof(ParticleRenderer), regs, fields, typeof(Renderer));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.ParticleRenderer", typeof(ParticleRenderer), regs, fields, typeof(Renderer));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

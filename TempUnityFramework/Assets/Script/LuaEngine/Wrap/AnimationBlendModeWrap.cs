@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Lshain
+namespace LT
 {
 	public class AnimationBlendModeWrap
 	{
@@ -14,7 +14,7 @@ namespace Lshain
 
 		public static void Register(IntPtr L)
 		{
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.AnimationBlendMode", typeof(UnityEngine.AnimationBlendMode), enums);
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.AnimationBlendMode", typeof(UnityEngine.AnimationBlendMode), enums);
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

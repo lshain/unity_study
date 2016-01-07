@@ -2,7 +2,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class ParticleSystemWrap
 	{
@@ -65,7 +65,7 @@ namespace Lshain
 				new LuaField("textureSheetAnimation", get_textureSheetAnimation, null),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.ParticleSystem", typeof(ParticleSystem), regs, fields, typeof(Component));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.ParticleSystem", typeof(ParticleSystem), regs, fields, typeof(Component));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

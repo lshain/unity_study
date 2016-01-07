@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lshain
+namespace LT
 {
 	public class stringWrap
 	{
@@ -61,7 +61,7 @@ namespace Lshain
 				new LuaField("Length", get_Length, null),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "System.String", typeof(string), regs, fields, typeof(object));
+			LuaScriptMgr.RegisterLuaTable(L, "System.String", typeof(string), regs, fields, typeof(object));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

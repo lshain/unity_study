@@ -2,7 +2,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class CameraWrap
 	{
@@ -95,7 +95,7 @@ namespace Lshain
 				new LuaField("commandBufferCount", get_commandBufferCount, null),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.Camera", typeof(Camera), regs, fields, typeof(Behaviour));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.Camera", typeof(Camera), regs, fields, typeof(Behaviour));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

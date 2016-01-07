@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Lshain
+namespace LT
 {
 	public class AnimationStateWrap
 	{
@@ -32,7 +32,7 @@ namespace Lshain
 				new LuaField("blendMode", get_blendMode, set_blendMode),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.AnimationState", typeof(AnimationState), regs, fields, typeof(TrackedReference));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.AnimationState", typeof(AnimationState), regs, fields, typeof(TrackedReference));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

@@ -7,26 +7,14 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 using Object = UnityEngine.Object;
+using UnityEngine.Rendering;
 
-namespace Lshain
+namespace LT
 {
 	[InitializeOnLoad]
 	public static class LuaEngineTools
 	{
 		private static readonly string TAG = "LuaWrapGen";
-
-		public static readonly string LUA_BASE_DIR = Application.dataPath + "/Script/LuaEngine/Base/";
-		public static readonly string LUA_CORE_DIR = Application.dataPath + "/Script/LuaEngine/Core/";
-		public static readonly string LUA_WRAPFILE_DIR = Application.dataPath + "/Script/LuaEngine/Wrap/";
-		public static readonly string LUA_BINDER_FILE = Application.dataPath + "/Script/LuaEngine/Base/LuaBinder.cs";
-		public static readonly string LUA_DELEGATE_FACTORY_FILE = Application.dataPath + "/Script/LuaEngine/Base/DelegateFactory.cs";
-
-        private static readonly string INDENT_NONE = "";
-        private static readonly string INDENT_1 = "\t";
-        private static readonly string INDENT_2 = "\t\t";
-        private static readonly string INDENT_3 = "\t\t\t";
-        private static readonly string INDENT_4 = "\t\t\t\t";
-        private static readonly string INDENT_5 = "\t\t\t\t\t";
 
 		static string GetOS ()
 		{
@@ -223,7 +211,8 @@ namespace Lshain
 			_GT (typeof(Camera)),   
 			_GT (typeof(CameraClearFlags)),           
 			_GT (typeof(Material)),
-			_GT (typeof(Renderer)),        
+			_GT (typeof(Renderer)),   
+            _GT (typeof(ShadowCastingMode)),
 			_GT (typeof(MeshRenderer)),
 			_GT (typeof(SkinnedMeshRenderer)),
 			_GT (typeof(Light)),
@@ -305,8 +294,8 @@ namespace Lshain
 				EditorApplication.isPlaying = true;
 			}
 
-            DeleteDir (LUA_WRAPFILE_DIR);
-			CreateDir (LUA_WRAPFILE_DIR);
+			DeleteDir (GlobalConst.LUA_WRAPFILE_DIR);
+			CreateDir (GlobalConst.LUA_WRAPFILE_DIR);
 
 			BindType[] list = _BIND_CLASS_LIST_;
 
@@ -332,35 +321,35 @@ namespace Lshain
 			StringBuilder sb = new StringBuilder ();
 			sb.AppendLine ("using System;");
 			sb.AppendLine ();
-            sb.AppendLine("namespace Lshain");
+            sb.AppendLine("namespace LT");
             sb.AppendLine("{");
-            sb.AppendLine(INDENT_1 + "public static class LuaBinder");
-            sb.AppendLine(INDENT_1 + "{");
-			sb.AppendLine (INDENT_2 + "public static void Bind(IntPtr L)");
-            sb.AppendLine(INDENT_2 + "{");
+            sb.AppendLine(GlobalConst.INDENT_1 + "public static class LuaBinder");
+            sb.AppendLine(GlobalConst.INDENT_1 + "{");
+			sb.AppendLine (GlobalConst.INDENT_2 + "public static void Bind(IntPtr L)");
+            sb.AppendLine(GlobalConst.INDENT_2 + "{");
 
-		    if (Directory.Exists(LUA_WRAPFILE_DIR))
+		    if (Directory.Exists(GlobalConst.LUA_WRAPFILE_DIR))
 		    {
-                string[] files = Directory.GetFiles(LUA_WRAPFILE_DIR, "*.cs", SearchOption.TopDirectoryOnly);
+                string[] files = Directory.GetFiles(GlobalConst.LUA_WRAPFILE_DIR, "*.cs", SearchOption.TopDirectoryOnly);
 
                 for (int i = 0; i < files.Length; i++)
                 {
                     string wrapName = Path.GetFileName(files[i]);
                     int pos = wrapName.LastIndexOf(".");
                     wrapName = wrapName.Substring(0, pos);
-                    sb.AppendFormat(INDENT_3 + "{0}.Register(L);\r\n", wrapName);
+                    sb.AppendFormat(GlobalConst.INDENT_3 + "{0}.Register(L);\r\n", wrapName);
                 }
 		    }
 		    else
 		    {
-                LogManager.V(TAG, LUA_WRAPFILE_DIR + " not exists!");
+                LogManager.V(TAG, GlobalConst.LUA_WRAPFILE_DIR + " not exists!");
 		    }
 
-            sb.AppendLine(INDENT_2 + "}");
-            sb.AppendLine(INDENT_1 + "}");
+            sb.AppendLine(GlobalConst.INDENT_2 + "}");
+            sb.AppendLine(GlobalConst.INDENT_1 + "}");
             sb.AppendLine("}");
 
-			using (StreamWriter textWriter = new StreamWriter (LUA_BINDER_FILE, false, Encoding.UTF8)) {
+			using (StreamWriter textWriter = new StreamWriter (GlobalConst.LUA_BINDER_FILE, false, Encoding.UTF8)) {
 				textWriter.Write (sb.ToString ());
 				textWriter.Flush ();
 				textWriter.Close ();
@@ -373,17 +362,17 @@ namespace Lshain
 			StringBuilder sb = new StringBuilder ();
 			sb.AppendLine ("using System;");
 			sb.AppendLine ();
-		    sb.AppendLine("namespace Lshain");
+		    sb.AppendLine("namespace LT");
             sb.AppendLine("{");
-			sb.AppendLine (INDENT_1 + "public static class LuaBinder");
-            sb.AppendLine(INDENT_1 + "{");
-            sb.AppendLine(INDENT_2 + "public static void Bind(IntPtr L)");
-            sb.AppendLine(INDENT_2 + "{");
-            sb.AppendLine(INDENT_2 + "}");
-            sb.AppendLine(INDENT_1 + "}");
+			sb.AppendLine (GlobalConst.INDENT_1 + "public static class LuaBinder");
+            sb.AppendLine(GlobalConst.INDENT_1 + "{");
+            sb.AppendLine(GlobalConst.INDENT_2 + "public static void Bind(IntPtr L)");
+            sb.AppendLine(GlobalConst.INDENT_2 + "{");
+            sb.AppendLine(GlobalConst.INDENT_2 + "}");
+            sb.AppendLine(GlobalConst.INDENT_1 + "}");
             sb.AppendLine("}");
 
-			using (StreamWriter textWriter = new StreamWriter (LUA_BINDER_FILE, false, Encoding.UTF8)) {
+			using (StreamWriter textWriter = new StreamWriter (GlobalConst.LUA_BINDER_FILE, false, Encoding.UTF8)) {
 				textWriter.Write (sb.ToString ());
 				textWriter.Flush ();
 				textWriter.Close ();
@@ -487,10 +476,10 @@ namespace Lshain
 			Debug.Log ("Create lua delegate over");
 		}
 
-		static void CopyLuaToOut (string dir)
+		static void CopyLuaToOut ()
 		{
-			string[] files = Directory.GetFiles (Application.dataPath + "/Lua/" + dir, "*.lua", SearchOption.TopDirectoryOnly);
-			string outDir = Application.dataPath + "/Lua/Out/" + dir + "/";
+			string[] files = Directory.GetFiles (GlobalConst.LUA_SOURCE_DIR, "*.lua", SearchOption.TopDirectoryOnly);
+			string outDir = GlobalConst.LUA_SOURCE_OUT_DIR;
 
 			CreateDir (outDir);
 
@@ -500,13 +489,13 @@ namespace Lshain
 			}
 		}
 
-		static void BuildLuaBundle (string dir)
+		static void BuildLuaBundle ()
 		{
 			BuildAssetBundleOptions options = BuildAssetBundleOptions.CollectDependencies | BuildAssetBundleOptions.CompleteAssets | BuildAssetBundleOptions.DeterministicAssetBundle;
 
-			string[] files = Directory.GetFiles ("Assets/Lua/Out/" + dir, "*.lua.bytes");
+			string[] files = Directory.GetFiles (GlobalConst.LUA_SOURCE_OUT_DIR, "*.lua.bytes");
 			List<Object> list = new List<Object> ();
-			string bundleName = dir == null ? "Lua.unity3d" : "Lua_" + dir + ".unity3d";
+			string bundleName = "Lua.unity3d";
 
 			CreateDir (Application.dataPath + "/Bundle/");
 			CreateDir (string.Format ("{0}/{1}/", Application.persistentDataPath, GetOS ()));
@@ -529,19 +518,17 @@ namespace Lshain
 		[MenuItem ("LuaEngine/Build Lua Without JIT", false, 100)]
 		public static void BuildLuaNoJit ()
 		{
-			string dir = Application.dataPath + "/Lua/Out/";
+			CreateDir (GlobalConst.LUA_SOURCE_DIR);
 
-			CreateDir (dir);
-
-			string[] files = Directory.GetFiles (dir, "*.lua.bytes", SearchOption.AllDirectories);
+			string[] files = Directory.GetFiles (GlobalConst.LUA_SOURCE_DIR, "*.lua.bytes", SearchOption.AllDirectories);
 
 			for (int i = 0; i < files.Length; i++) {
 				FileUtil.DeleteFileOrDirectory (files [i]);
 			}
 
-			CopyLuaToOut (null);
+			CopyLuaToOut ();
 			AssetDatabase.Refresh ();
-			BuildLuaBundle (null);
+			BuildLuaBundle ();
 			UnityEngine.Debug.Log ("编译lua without jit结束");
 		}
 

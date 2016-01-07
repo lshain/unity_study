@@ -1,44 +1,49 @@
 ﻿using UnityEngine;
-using System.Diagnostics;
 
-namespace Lshain
+namespace LT
 {
 	public static class LogManager
 	{
-		[Conditional("DEBUG")]
 	    public static void E(string tag, string msg)
 	    {
+#if DEBUG
 			UnityEngine.Debug.LogError(tag + ": " + msg);
+#endif
 	    }
-
-		[Conditional("DEBUG")]
+			
 	    public static void V(string tag, string msg)
 	    {
+#if DEBUG
 			UnityEngine.Debug.Log(tag + ": " + msg);
-	    }
+#endif
+        }
 
-		[Conditional("DEBUG")]
 	    public static void W(string tag, string msg)
 	    {
+#if DEBUG
 			UnityEngine.Debug.LogWarning(tag + ": " + msg);
-	    }
+#endif
+        }
 
-	    [Conditional("DEBUG")]
 	    public static void E(string msg)
 	    {
+#if DEBUG
 	        UnityEngine.Debug.LogError(msg);
-	    }
+#endif
+        }
 
-	    [Conditional("DEBUG")]
 	    public static void V(string msg)
 	    {
+#if DEBUG
 	        UnityEngine.Debug.Log(msg);
-	    }
+#endif
+        }
 
-	    [Conditional("DEBUG")]
 	    public static void W(string msg)
 	    {
+#if DEBUG
 	        UnityEngine.Debug.LogWarning(msg);
-	    }
+#endif
+        }
 	}
 }

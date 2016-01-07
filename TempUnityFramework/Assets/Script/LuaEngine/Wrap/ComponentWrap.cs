@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class ComponentWrap
 	{
@@ -33,7 +33,7 @@ namespace Lshain
 				new LuaField("tag", get_tag, set_tag),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.Component", typeof(Component), regs, fields, typeof(Object));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.Component", typeof(Component), regs, fields, typeof(Object));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

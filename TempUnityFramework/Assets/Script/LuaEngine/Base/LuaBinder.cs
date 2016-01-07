@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lshain
+namespace LT
 {
 	public static class LuaBinder
 	{
@@ -31,7 +31,7 @@ namespace Lshain
 			KeyCodeWrap.Register(L);
 			LightTypeWrap.Register(L);
 			LightWrap.Register(L);
-			Lshain_LogManagerWrap.Register(L);
+			LT_LogManagerWrap.Register(L);
 			MaterialWrap.Register(L);
 			MeshColliderWrap.Register(L);
 			MeshRendererWrap.Register(L);
@@ -61,6 +61,7 @@ namespace Lshain
 			TrackedReferenceWrap.Register(L);
 			TransformWrap.Register(L);
 			TypeWrap.Register(L);
+			UnityEngine_Rendering_ShadowCastingModeWrap.Register(L);
 		}
 	}
 }

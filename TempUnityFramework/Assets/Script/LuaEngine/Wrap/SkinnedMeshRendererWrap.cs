@@ -2,7 +2,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class SkinnedMeshRendererWrap
 	{
@@ -28,7 +28,7 @@ namespace Lshain
 				new LuaField("localBounds", get_localBounds, set_localBounds),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.SkinnedMeshRenderer", typeof(SkinnedMeshRenderer), regs, fields, typeof(Renderer));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.SkinnedMeshRenderer", typeof(SkinnedMeshRenderer), regs, fields, typeof(Renderer));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

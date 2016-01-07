@@ -2,7 +2,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
-namespace Lshain
+namespace LT
 {
     public static class LuaRegistrationHelper
     {

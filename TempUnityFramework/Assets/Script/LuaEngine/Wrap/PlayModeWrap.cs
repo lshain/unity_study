@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Lshain
+namespace LT
 {
 	public class PlayModeWrap
 	{
@@ -14,7 +14,7 @@ namespace Lshain
 
 		public static void Register(IntPtr L)
 		{
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.PlayMode", typeof(UnityEngine.PlayMode), enums);
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.PlayMode", typeof(UnityEngine.PlayMode), enums);
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lshain
+namespace LT
 {
 	public class EnumWrap
 	{
@@ -30,7 +30,7 @@ namespace Lshain
 			{
 			};
 
-			LuaScriptMgr.RegisterLib(L, "System.Enum", typeof(Enum), regs, fields, null);
+			LuaScriptMgr.RegisterLuaTable(L, "System.Enum", typeof(Enum), regs, fields, null);
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

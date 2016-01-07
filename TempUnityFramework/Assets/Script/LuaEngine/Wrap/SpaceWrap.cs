@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Lshain
+namespace LT
 {
 	public class SpaceWrap
 	{
@@ -14,7 +14,7 @@ namespace Lshain
 
 		public static void Register(IntPtr L)
 		{
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.Space", typeof(UnityEngine.Space), enums);
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.Space", typeof(UnityEngine.Space), enums);
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

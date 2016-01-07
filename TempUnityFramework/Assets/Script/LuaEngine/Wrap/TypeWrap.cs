@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lshain
+namespace LT
 {
 	public class TypeWrap
 	{
@@ -123,7 +123,7 @@ namespace Lshain
 				new LuaField("StructLayoutAttribute", get_StructLayoutAttribute, null),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "System.Type", typeof(Type), regs, fields, typeof(System.Object));
+			LuaScriptMgr.RegisterLuaTable(L, "System.Type", typeof(Type), regs, fields, typeof(System.Object));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

@@ -2,7 +2,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class AudioSourceWrap
 	{
@@ -61,7 +61,7 @@ namespace Lshain
 				new LuaField("rolloffMode", get_rolloffMode, set_rolloffMode),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.AudioSource", typeof(AudioSource), regs, fields, typeof(Behaviour));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.AudioSource", typeof(AudioSource), regs, fields, typeof(Behaviour));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

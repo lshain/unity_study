@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Lshain
+namespace LT
 {
 	public class PhysicsWrap
 	{
@@ -49,7 +49,7 @@ namespace Lshain
 				new LuaField("queriesHitTriggers", get_queriesHitTriggers, set_queriesHitTriggers),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.Physics", typeof(Physics), regs, fields, typeof(object));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.Physics", typeof(Physics), regs, fields, typeof(object));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class RendererWrap
 	{
@@ -45,7 +45,7 @@ namespace Lshain
 				new LuaField("sortingOrder", get_sortingOrder, set_sortingOrder),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.Renderer", typeof(Renderer), regs, fields, typeof(Component));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.Renderer", typeof(Renderer), regs, fields, typeof(Component));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Collections;
 using Object = UnityEngine.Object;
 
-namespace Lshain
+namespace LT
 {
 	public class TransformWrap
 	{
@@ -58,7 +58,7 @@ namespace Lshain
 				new LuaField("hasChanged", get_hasChanged, set_hasChanged),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.Transform", typeof(Transform), regs, fields, typeof(Component));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.Transform", typeof(Transform), regs, fields, typeof(Component));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]

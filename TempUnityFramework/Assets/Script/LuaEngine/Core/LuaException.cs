@@ -1,7 +1,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Lshain
+namespace LT
 {
     /// <summary>
     /// Exceptions thrown by the Lua runtime

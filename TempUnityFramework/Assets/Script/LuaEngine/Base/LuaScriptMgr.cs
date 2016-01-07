@@ -8,7 +8,7 @@ using System.Text;
 using System.Diagnostics;
 using System.Collections;
 
-namespace Lshain
+namespace LT
 {
 	public class LuaScriptMgr
 	{
@@ -625,8 +625,9 @@ namespace Lshain
 			byte[] str = null;
 			fileList.Add (name);
 
+            LogManager.V("Loader name:" + name);
 #if !LUA_ZIP
-			string path = Application.dataPath + "/Lua/" + name;
+            string path = GlobalConst.LUA_SOURCE_DIR + name;
 
 			if (File.Exists (path)) {
 				str = File.ReadAllBytes (path);
@@ -818,9 +819,9 @@ namespace Lshain
 		}
 
 		//注册一个枚举类型
-		public static void RegisterLib (IntPtr L, string libName, Type t, LuaMethod[] regs)
+        public static void RegisterLuaTable(IntPtr L, string tableName, Type t, LuaMethod[] regs)
 		{
-			CreateTable (L, libName);
+            CreateTable(L, tableName);
 
 			LuaDLL.luaL_getmetatable (L, t.AssemblyQualifiedName);
 
@@ -852,9 +853,9 @@ namespace Lshain
 			LuaDLL.lua_settop (L, 0);     
 		}
 
-		public static void RegisterLib (IntPtr L, string libName, LuaMethod[] regs)
+        public static void RegisterLuaTable(IntPtr L, string tableName, LuaMethod[] regs)
 		{
-			CreateTable (L, libName);
+            CreateTable(L, tableName);
 
 			for (int i = 0; i < regs.Length; i++) {
 				LuaDLL.lua_pushstring (L, regs [i].name);
@@ -879,9 +880,9 @@ namespace Lshain
 		}
 
 
-		public static void RegisterLib (IntPtr L, string libName, Type t, LuaMethod[] regs, LuaField[] fields, Type baseType)
+		public static void RegisterLuaTable (IntPtr L, string tableName, Type t, LuaMethod[] regs, LuaField[] fields, Type baseType)
 		{
-			CreateTable (L, libName);
+            CreateTable(L, tableName);
 
 			LuaDLL.luaL_getmetatable (L, t.AssemblyQualifiedName);
 

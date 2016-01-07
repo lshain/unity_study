@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Lshain
+namespace LT
 {
 	public class SleepTimeoutWrap
 	{
@@ -19,7 +19,7 @@ namespace Lshain
 				new LuaField("SystemSetting", get_SystemSetting, null),
 			};
 
-			LuaScriptMgr.RegisterLib(L, "UnityEngine.SleepTimeout", typeof(SleepTimeout), regs, fields, typeof(object));
+			LuaScriptMgr.RegisterLuaTable(L, "UnityEngine.SleepTimeout", typeof(SleepTimeout), regs, fields, typeof(object));
 		}
 
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
