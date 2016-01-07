@@ -27,7 +27,7 @@
 
                 if (mi != null)
                 {                    
-                    //SJD this is guaranteed to be correct irrespective of actual name used for Type..
+                    //SJD this is guaranteed to be correct irrespective of actual name used for type..
                     IsReturnVoid = mi.ReturnType == typeof(void);
                 }
             }
@@ -35,7 +35,9 @@
 
         public bool IsReturnVoid;
 
-        // List or arguments
+		// List or arguments, 
+		// fjs: 狗日的这个会缓存每一次调用某个函数的参数，导致内存释放不了。
+		// 修改方案: 调用完成后，或中间出错退出时一定要清空这个数组的所有元素, 完事以后一定得提起裤子就走人，别留恋!
         public object[] args;
         // Positions of out parameters
         public int[] outList;
@@ -59,7 +61,7 @@
     }
 
     /*
-     * Argument extraction with Type-conversion function
+     * Argument extraction with type-conversion function
      */
     delegate object ExtractValue(IntPtr luaState, int stackPos);
 
@@ -132,6 +134,15 @@
             return Math.Ceiling(x) == x;
         }
 
+		// fjs: 清空缓存的 args 数组，否则这里会造成内存泄露，无法被GC掉, 纹理内存最严重
+		private void ClearCachedArgs()
+		{
+			if(_LastCalledMethod.args == null) { return ; }
+			for(int i = 0; i < _LastCalledMethod.args.Length; i++)
+			{
+				_LastCalledMethod.args[i] = null;
+			}
+		}
 
         /*
          * Calls the method. Receives the arguments from the Lua stack
@@ -170,24 +181,25 @@
                         if (!LuaDLL.lua_checkstack(luaState, _LastCalledMethod.outList.Length + 6))
                             throw new LuaException("Lua stack overflow");
 
+						// fjs: 这里 args 只是将 _LastCalledMethod.args 拿来做缓冲区用，避免内存再分配, 里面的值是可以干掉的
                         object[] args = _LastCalledMethod.args;
 
                         try
                         {
                             for (int i = 0; i < _LastCalledMethod.argTypes.Length; i++)
                             {
-                                MethodArgs Type = _LastCalledMethod.argTypes[i];
-                                object luaParamValue = Type.extractValue(luaState, i + 1 + numStackToSkip);
+                                MethodArgs type = _LastCalledMethod.argTypes[i];
+                                object luaParamValue = type.extractValue(luaState, i + 1 + numStackToSkip);
                                 if (_LastCalledMethod.argTypes[i].isParamsArray)
                                 {
-                                    args[Type.index] = _Translator.tableToArray(luaParamValue,Type.paramsArrayType);
+                                    args[type.index] = _Translator.tableToArray(luaParamValue,type.paramsArrayType);
                                 }
                                 else
                                 {
-                                    args[Type.index] = luaParamValue;
+                                    args[type.index] = luaParamValue;
                                 }
 
-                                if (args[Type.index] == null &&
+                                if (args[type.index] == null &&
                                     !LuaDLL.lua_isnil(luaState, i + 1 + numStackToSkip))
                                 {
                                     throw new LuaException("argument number " + (i + 1) + " is invalid");
@@ -247,6 +259,7 @@
 
                         MethodBase m = (MethodInfo)member;
 
+						// fjs: 这里在缓存调用参数，退出前一定要释放掉
                         bool isMethod = _Translator.matchParameters(luaState, m, ref _LastCalledMethod);
                         if (isMethod)
                         {
@@ -262,6 +275,10 @@
 
                         LuaDLL.luaL_error(luaState, msg);
                         LuaDLL.lua_pushnil(luaState);
+
+						// fjs: 这里释放掉缓存的参数对象
+						ClearCachedArgs();
+
                         return 1;
                     }
                 }
@@ -271,11 +288,12 @@
                 if (methodToCall.ContainsGenericParameters)
                 {
                     // bool isMethod = //* not used
+					// fjs: 这里在缓存调用参数，退出前一定要释放掉
                     _Translator.matchParameters(luaState, methodToCall, ref _LastCalledMethod);
 
                     if (methodToCall.IsGenericMethodDefinition)
                     {
-                        //need to make a concrete Type of the generic method definition
+                        //need to make a concrete type of the generic method definition
                         List<Type> typeArgs = new List<Type>();
 
                         foreach (object arg in _LastCalledMethod.args)
@@ -290,6 +308,9 @@
                     {
                         LuaDLL.luaL_error(luaState, "unable to invoke method on generic class as the current method is an open generic method");
                         LuaDLL.lua_pushnil(luaState);
+
+						// fjs: 这里释放掉缓存的参数对象
+						ClearCachedArgs();
                         return 1;
                     }
                 }
@@ -301,10 +322,14 @@
                         LuaDLL.lua_remove(luaState, 1); // Pops the receiver
                     }
 
+					// fjs: 这里在缓存调用参数，退出前一定要释放掉
                     if (!_Translator.matchParameters(luaState, methodToCall, ref _LastCalledMethod))
                     {
                         LuaDLL.luaL_error(luaState, "invalid arguments to method call");
                         LuaDLL.lua_pushnil(luaState);
+
+						// fjs: 这里释放掉缓存的参数对象
+						ClearCachedArgs();
                         return 1;
                     }
                 }
@@ -313,7 +338,11 @@
             if (failedCall)
             {
                 if (!LuaDLL.lua_checkstack(luaState, _LastCalledMethod.outList.Length + 6))
+				{
+					// fjs: 这里释放掉缓存的参数对象
+					ClearCachedArgs();
                     throw new LuaException("Lua stack overflow");
+				}
                 try
                 {
                     if (isStatic)
@@ -330,10 +359,14 @@
                 }
                 catch (TargetInvocationException e)
                 {
+					// fjs: 这里释放掉缓存的参数对象
+					ClearCachedArgs();
                     return SetPendingException(e.GetBaseException());
                 }
                 catch (Exception e)
                 {
+					// fjs: 这里释放掉缓存的参数对象
+					ClearCachedArgs();
                     return SetPendingException(e);
                 }
             }
@@ -354,6 +387,9 @@
             {
                 nReturnValues++;
             }
+
+			// fjs: 这里释放掉缓存的参数对象
+			ClearCachedArgs();
 
             return nReturnValues < 1 ? 1 : nReturnValues;
         }

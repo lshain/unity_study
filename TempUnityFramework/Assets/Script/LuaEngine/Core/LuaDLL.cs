@@ -10,8 +10,8 @@
 	#pragma warning disable 414
     public class MonoPInvokeCallbackAttribute : System.Attribute
     {
-        private Type Type;
-        public MonoPInvokeCallbackAttribute(Type t) { Type = t; }
+        private Type type;
+        public MonoPInvokeCallbackAttribute(Type t) { type = t; }
     }
 	#pragma warning restore 414
 	
@@ -80,22 +80,38 @@
 	{
         public static int LUA_MULTRET = -1;
 #if UNITY_IPHONE
+#if UNITY_EDITOR
+        const string LUADLL = "ulua";
+#else
         const string LUADLL = "__Internal";
+#endif
 #else
         const string LUADLL = "ulua";
-#endif              		
+#endif          		
         [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern int luaopen_pb(IntPtr L);
 
-        //[DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
-        //public static extern int luaopen_LuaXML(IntPtr L);
+        [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int luaopen_sproto_core(IntPtr L);
 
         [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
-        public static extern int luaopen_ffi(IntPtr L);
+        public static extern int luaopen_protobuf_c(IntPtr L);
 
-        //[DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
-        //public static extern int luaopen_pack(IntPtr L);
+        [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int luaopen_lpeg(IntPtr L);
 
+        [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int luaopen_cjson(IntPtr L);
+
+        [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int luaopen_cjson_safe(IntPtr L);
+
+        [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int luaopen_bit(IntPtr L);
+#if UNITY_EDITOR
+        [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
+        public static extern int luaopen_socket_core(IntPtr L);
+#endif
         [DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
         public static extern int tolua_openlibs(IntPtr L);        
 
@@ -128,7 +144,7 @@
 		[DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
 		public static extern int lua_gc(IntPtr luaState, LuaGCOptions what, int data);
 		[DllImport(LUADLL, CallingConvention = CallingConvention.Cdecl)]
-		public static extern string lua_typename(IntPtr luaState, LuaTypes Type);
+		public static extern string lua_typename(IntPtr luaState, LuaTypes type);
 		public static string luaL_typename(IntPtr luaState, int stackPos)
 		{
 			return LuaDLL.lua_typename(luaState, LuaDLL.lua_type(luaState, stackPos));

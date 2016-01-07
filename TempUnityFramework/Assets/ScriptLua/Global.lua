@@ -1,3 +1,5 @@
+require "import_wrap"
+
 luanet.load_assembly("UnityEngine")
 
 object			= System.Object

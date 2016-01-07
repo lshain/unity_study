@@ -29,7 +29,7 @@ namespace LT
            return cached
         else
            local value,isFunc = get_object_member(obj,name)
-           if value==nil and Type(isFunc)=='string' then error(isFunc,2) end
+           if value==nil and type(isFunc)=='string' then error(isFunc,2) end
            if isFunc then
             meta.cache[name]=value
            end
@@ -116,12 +116,12 @@ namespace LT
 			Debug.WriteLine("lua stack depth: " + depth);
 			for (int i = 1; i <= depth; i++)
 			{
-				LuaTypes Type = LuaDLL.lua_type(luaState, i);
+				LuaTypes type = LuaDLL.lua_type(luaState, i);
 				// we dump stacks when deep in calls, calling typename while the stack is in flux can fail sometimes, so manually check for key types
-				string typestr = (Type == LuaTypes.LUA_TTABLE) ? "table" : LuaDLL.lua_typename(luaState, Type);
+				string typestr = (type == LuaTypes.LUA_TTABLE) ? "table" : LuaDLL.lua_typename(luaState, type);
 				
 				string strrep = LuaDLL.lua_tostring(luaState, i);
-				if (Type == LuaTypes.LUA_TUSERDATA)
+				if (type == LuaTypes.LUA_TUSERDATA)
 				{
 					object obj = translator.getRawNetObject(luaState, i);
 					strrep = obj.ToString();
@@ -168,7 +168,7 @@ namespace LT
 			catch { }
 			bool failed = true;
 			
-			// Try to access by array if the Type is right and index is an int (lua numbers always come across as double)
+			// Try to access by array if the type is right and index is an int (lua numbers always come across as double)
 			if (objType.IsArray && index is double)
 			{
 				int intIndex = (int)((double)index);
@@ -290,10 +290,10 @@ namespace LT
 		}
 		
 		/*
-         * Pushes the value of a member or a delegate to call it, depending on the Type of
+         * Pushes the value of a member or a delegate to call it, depending on the type of
          * the member. Works with static or instance members.
          * Uses reflection to find members, and stores the reflected MemberInfo object in
-         * a cache (indexed by the Type of the object and the name of the member).
+         * a cache (indexed by the type of the object and the name of the member).
          */
 		private int getMember(IntPtr luaState, IReflect objType, object obj, string methodName, BindingFlags bindingType)
 		{
@@ -391,7 +391,7 @@ namespace LT
 						string name = member.Name;
 						Type dectype = member.DeclaringType;
 						
-						// Build a new long name and try to find the Type by name
+						// Build a new long name and try to find the type by name
 						string longname = dectype.FullName + "+" + name;
 						Type nestedType = translator.FindType(longname);
 						
@@ -399,7 +399,7 @@ namespace LT
 					}
 					else
 					{
-						// Member Type must be 'method'
+						// Member type must be 'method'
 						LuaCSFunction wrapper = new LuaCSFunction((new LuaMethodWrapper(translator, objType, methodName, bindingType)).call);
 						
 						if (cachedMember == null) setMemberCache(memberCache, objType, methodName, wrapper);
@@ -470,11 +470,11 @@ namespace LT
 				translator.throwError(luaState, "trying to index and invalid object reference");
 				return 0;
 			}
-			Type Type = target.GetType();
+			Type type = target.GetType();
 			
 			// First try to look up the parameter as a property name
 			string detailMessage;
-			bool didMember = translator.metaFunctions.trySetMember(luaState, Type, target, BindingFlags.Instance | BindingFlags.IgnoreCase, out detailMessage);
+			bool didMember = translator.metaFunctions.trySetMember(luaState, type, target, BindingFlags.Instance | BindingFlags.IgnoreCase, out detailMessage);
 			
 			if (didMember)
 				return 0;       // Must have found the property name
@@ -482,7 +482,7 @@ namespace LT
 			// We didn't find a property name, now see if we can use a [] style this accessor to set array contents
 			try
 			{
-				if (Type.IsArray && LuaDLL.lua_isnumber(luaState, 2))
+				if (type.IsArray && LuaDLL.lua_isnumber(luaState, 2))
 				{
 					int index = (int)LuaDLL.lua_tonumber(luaState, 2);
 					
@@ -493,7 +493,7 @@ namespace LT
 				else
 				{
 					// Try to see if we have a this[] accessor
-					MethodInfo setter = Type.GetMethod("set_Item");
+					MethodInfo setter = type.GetMethod("set_Item");
 					if (setter != null)
 					{
 						ParameterInfo[] args = setter.GetParameters();
@@ -647,7 +647,7 @@ namespace LT
 		}
 		
 		/*
-         * __index metafunction of Type references, works on static members.
+         * __index metafunction of type references, works on static members.
          */
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 		public static int getClassMethod(IntPtr luaState)
@@ -657,7 +657,7 @@ namespace LT
 			object obj = translator.getRawNetObject(luaState, 1);
 			if (obj == null || !(obj is IReflect))
 			{
-				translator.throwError(luaState, "trying to index an invalid Type reference");
+				translator.throwError(luaState, "trying to index an invalid type reference");
 				LuaDLL.lua_pushnil(luaState);
 				return 1;
 			}
@@ -680,7 +680,7 @@ namespace LT
 			}
 		}
 		/*
-         * __newindex function of Type references, works on static members.
+         * __newindex function of type references, works on static members.
          */
 		[MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
 		public static int setClassFieldOrProperty(IntPtr luaState)
@@ -690,15 +690,15 @@ namespace LT
 			object obj = translator.getRawNetObject(luaState, 1);
 			if (obj == null || !(obj is IReflect))
 			{
-				translator.throwError(luaState, "trying to index an invalid Type reference");
+				translator.throwError(luaState, "trying to index an invalid type reference");
 				return 0;
 			}
 			else target = (IReflect)obj;
 			return translator.metaFunctions.setMember(luaState, target, null, BindingFlags.FlattenHierarchy | BindingFlags.Static | BindingFlags.IgnoreCase);
 		}
 		/*
-         * __call metafunction of Type references. Searches for and calls
-         * a constructor for the Type. Returns nil if the constructor is not
+         * __call metafunction of type references. Searches for and calls
+         * a constructor for the type. Returns nil if the constructor is not
          * found or if the arguments are invalid. Throws an error if the constructor
          * generates an exception.
          */
@@ -711,7 +711,7 @@ namespace LT
 			object obj = translator.getRawNetObject(luaState, 1);
 			if (obj == null || !(obj is IReflect))
 			{				
-                LuaDLL.luaL_error(luaState, "trying to call constructor on an invalid Type reference");
+                LuaDLL.luaL_error(luaState, "trying to call constructor on an invalid type reference");
 				LuaDLL.lua_pushnil(luaState);
 				return 1;
 			}
@@ -869,7 +869,7 @@ namespace LT
 		
 		/// <summary>
 		/// CP: Fix for operator overloading failure
-		/// Returns true if the Type is set and assigns the extract value
+		/// Returns true if the type is set and assigns the extract value
 		/// </summary>
 		/// <param name="luaState"></param>
 		/// <param name="currentLuaParam"></param>
@@ -904,7 +904,7 @@ namespace LT
 				}
 				catch (Exception ex)
 				{
-					Debug.WriteLine("Could not retrieve lua Type while attempting to determine params Array Status."+ ex.ToString());
+					Debug.WriteLine("Could not retrieve lua type while attempting to determine params Array Status."+ ex.ToString());
 					Debug.WriteLine(ex.Message);
 					extractValue = null;
 					return false;

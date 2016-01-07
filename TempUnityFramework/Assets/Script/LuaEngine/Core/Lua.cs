@@ -30,6 +30,7 @@ namespace LT
         internal LuaCSFunction loadfileFunction;
         internal LuaCSFunction loaderFunction;
         internal LuaCSFunction dofileFunction;
+        internal LuaCSFunction import_wrapFunction;
 
         public LuaState()
         {
@@ -77,6 +78,10 @@ namespace LT
             dofileFunction = new LuaCSFunction(LuaStatic.dofile);
             LuaDLL.lua_pushstdcallcfunction(L, dofileFunction);
             LuaDLL.lua_setfield(L, LuaIndexes.LUA_GLOBALSINDEX, "dofile");
+
+            import_wrapFunction = new LuaCSFunction(LuaStatic.importWrap);
+            LuaDLL.lua_pushstdcallcfunction(L, import_wrapFunction);
+            LuaDLL.lua_setfield(L, LuaIndexes.LUA_GLOBALSINDEX, "import");
 
             // Insert our loader FIRST
             loaderFunction = new LuaCSFunction(LuaStatic.loader);
@@ -163,7 +168,7 @@ namespace LT
         public LuaFunction LoadString(string chunk, string name, LuaTable env)
         {
             int oldTop = LuaDLL.lua_gettop(L);
-            byte[] bt = Encoding.Default.GetBytes(chunk);
+            byte[] bt = Encoding.UTF8.GetBytes(chunk);
 
             if (LuaDLL.luaL_loadbuffer(L, bt, bt.Length, name) != 0)
                 ThrowExceptionFromError(oldTop);
@@ -284,7 +289,9 @@ namespace LT
 
             if (text == null)
             {
-                LogManager.E("Loader lua file failed: {0}", fileName);      
+                if (!fileName.Contains("mobdebug")) {
+                    LogManager.E("Loader lua file failed: {0}", fileName);      
+                }
                 LuaDLL.lua_pop(L, 1);
                 return null;
             }
@@ -357,9 +364,9 @@ namespace LT
                 {
                     //LuaDLL.lua_getglobal(L, path[0]);
                     LuaDLL.lua_rawglobal(L, path[0]);
-                    LuaTypes Type = LuaDLL.lua_type(L, -1);
+                    LuaTypes type = LuaDLL.lua_type(L, -1);
 
-                    if (Type == LuaTypes.LUA_TNIL)
+                    if (type == LuaTypes.LUA_TNIL)
                     {
                         LogManager.E("Table {0} not exists", path[0]);
                         LuaDLL.lua_settop(L, oldTop);

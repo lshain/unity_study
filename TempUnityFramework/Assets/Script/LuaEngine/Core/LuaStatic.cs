@@ -31,7 +31,6 @@ namespace LT
         //    LuaDLL.lua_settop(L, oldTop);
         //}
 
-        //默认函数不改路径， luamgr 再走统一目录
         static byte[] DefaultLoader(string path)
         {
             byte[] str = null;
@@ -84,20 +83,20 @@ namespace LT
 				LuaDLL.lua_pushvalue(L, -1);  /* function to be called */
 				LuaDLL.lua_pushvalue(L, i);   /* value to print */
 				LuaDLL.lua_call(L, 1, 1);
-				s += LuaDLL.lua_tostring(L, -1);
 				
 				if( i > 1 ) 
 				{
 					s += "\t";
 				}
+				s += LuaDLL.lua_tostring(L, -1);
 				
 				LuaDLL.lua_pop(L, 1);  /* pop result */
 				
-				Debug.Log("LUA: " + s);
+				
 
                 //LuaDLL.PrintCmd(s);
 			}
-
+			Debug.Log("LUA: " + s);
 		    
 			return 0;
 		}
@@ -106,11 +105,18 @@ namespace LT
 		public static int loader(IntPtr L)
 		{            
 			// Get script to load
-			string fileName = String.Empty;
+			string fileName = string.Empty;
 			fileName = LuaDLL.lua_tostring(L, 1);
-			fileName = fileName.Replace('.', '/');
-			fileName += ".lua";
-			
+			//fileName = fileName.Replace('.', '/');
+			//fileName += ".lua";
+
+            string lowerName = fileName.ToLower();
+            if (lowerName.EndsWith(".lua")) {
+                int index = fileName.LastIndexOf('.');
+                fileName = fileName.Substring(0, index);
+            }
+            fileName = fileName.Replace('.', '/') + ".lua";
+			/*
 			// Load with Unity3D resources			
             byte[] text = Load(fileName);
 
@@ -118,9 +124,26 @@ namespace LT
 			{
 				return 0;
 			}
-			
 			LuaDLL.luaL_loadbuffer(L, text, text.Length, fileName);
-			
+			*/
+            LuaScriptMgr mgr = LuaScriptMgr.GetMgrFromLuaState(L);
+            if (mgr == null) return 0;
+
+            LuaDLL.lua_pushstdcallcfunction(L, mgr.lua.tracebackFunction);
+            int oldTop = LuaDLL.lua_gettop(L);
+
+            byte[] text = LuaStatic.Load(fileName);
+            if (text == null) {
+                if (!fileName.Contains("mobdebug")) {
+                    LogManager.E("Loader lua file failed: {0}", fileName);
+                }
+                LuaDLL.lua_pop(L, 1);
+                return 0;
+            }
+            if (LuaDLL.luaL_loadbuffer(L, text, text.Length, fileName) != 0) {
+                mgr.lua.ThrowExceptionFromError(oldTop);
+                LuaDLL.lua_pop(L, 1);
+            }
 			return 1;
 		}
 		
@@ -130,8 +153,15 @@ namespace LT
 			// Get script to load
 			string fileName = String.Empty;
 			fileName = LuaDLL.lua_tostring(L, 1);
-			fileName.Replace('.', '/');
-			fileName += ".lua";
+			//fileName.Replace('.', '/');
+			//fileName += ".lua";
+
+            string lowerName = fileName.ToLower();
+            if (lowerName.EndsWith(".lua")) {
+                int index = fileName.LastIndexOf('.');
+                fileName = fileName.Substring(0, index);
+            }
+            fileName = fileName.Replace('.', '/') + ".lua";
 			
 			int n = LuaDLL.lua_gettop(L);
 			
@@ -157,23 +187,34 @@ namespace LT
 			return loader(L);
 		}
 
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        public static int importWrap(IntPtr L) {
+            string fileName = String.Empty;
+            fileName = LuaDLL.lua_tostring(L, 1);
+            fileName = fileName.Replace('.', '_');
+            if (!string.IsNullOrEmpty(fileName)) {
+                LuaBinder.Bind(L, fileName);
+            } 
+            return 0;
+        }
+
         public static string init_luanet =
             @"local metatable = {}
             local rawget = rawget
             local debug = debug
             local import_type = luanet.import_type
             local load_assembly = luanet.load_assembly
-            luanet.error, luanet.Type = error, Type
+            luanet.error, luanet.type = error, type
             -- Lookup a .NET identifier component.
             function metatable:__index(key) -- key is e.g. 'Form'
             -- Get the fully-qualified name, e.g. 'System.Windows.Forms.Form'
             local fqn = rawget(self,'.fqn')
             fqn = ((fqn and fqn .. '.') or '') .. key
 
-            -- Try to find either a luanet function or a CLR Type
+            -- Try to find either a luanet function or a CLR type
             local obj = rawget(luanet,key) or import_type(fqn)
 
-            -- If key is neither a luanet function or a CLR Type, then it is simply
+            -- If key is neither a luanet function or a CLR type, then it is simply
             -- an identifier component.
             if obj == nil then
                 -- It might be an assembly, so we load it too.
@@ -187,9 +228,9 @@ namespace LT
             return obj
             end
 
-            -- A non-Type has been called; e.g. foo = System.Foo()
+            -- A non-type has been called; e.g. foo = System.Foo()
             function metatable:__call(...)
-            error('No such Type: ' .. rawget(self,'.fqn'), 2)
+            error('No such type: ' .. rawget(self,'.fqn'), 2)
             end
 
             -- This is the root of the .NET namespace

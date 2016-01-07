@@ -17,6 +17,7 @@ namespace LT
 			dict.Add(typeof(UnityEngine.Events.UnityAction), new DelegateValue(UnityEngine_Events_UnityAction));
 			dict.Add(typeof(System.Reflection.MemberFilter), new DelegateValue(System_Reflection_MemberFilter));
 			dict.Add(typeof(System.Reflection.TypeFilter), new DelegateValue(System_Reflection_TypeFilter));
+			dict.Add(typeof(TestLuaDelegate.VoidDelegate), new DelegateValue(TestLuaDelegate_VoidDelegate));
 			dict.Add(typeof(Camera.CameraCallback), new DelegateValue(Camera_CameraCallback));
 			dict.Add(typeof(AudioClip.PCMReaderCallback), new DelegateValue(AudioClip_PCMReaderCallback));
 			dict.Add(typeof(AudioClip.PCMSetPositionCallback), new DelegateValue(AudioClip_PCMSetPositionCallback));
@@ -99,6 +100,19 @@ namespace LT
 			return d;
 		}
 
+		public static Delegate TestLuaDelegate_VoidDelegate(LuaFunction func)
+		{
+			TestLuaDelegate.VoidDelegate d = (param0) =>
+			{
+				int top = func.BeginPCall();
+				IntPtr L = func.GetLuaState();
+				LuaScriptMgr.Push(L, param0);
+				func.PCall(top, 1);
+				func.EndPCall(top);
+			};
+			return d;
+		}
+
 		public static Delegate Camera_CameraCallback(LuaFunction func)
 		{
 			Camera.CameraCallback d = (param0) =>
@@ -151,6 +165,10 @@ namespace LT
 				func.EndPCall(top);
 			};
 			return d;
+		}
+		public static void Clear()
+		{
+			dict.Clear();
 		}
 	}
 }
